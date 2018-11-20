@@ -1,0 +1,82 @@
+body{
+	background-color: #dedede;
+}
+
+.card
+{
+	display: block;
+	cursor: pointer;
+	
+	font-size: 17px;
+	color: #fefefe;
+
+	width: 500px;
+	
+	background-color: #ffffff;
+	
+	box-shadow: 2px 2px 12px 0 rgba(0,0,0,0.37);
+}
+
+.card > header
+{
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	background-color: #f1f1f1;
+	position: relative;
+	
+	margin-bottom: 10px;
+	width: 100%;
+	height: 31px;
+}
+.card > header > span
+{
+	text-align: center;
+	color: #000;
+	font-family: Roboto, sans-serif;
+	font-size: 14px;
+	font-weight: 700;
+}
+
+.card > .sensorList
+{
+	height: 120px;
+}
+
+.card p
+{	
+	margin: 0;
+	margin-left: 25px;
+	
+	color: #a3a3a3;
+	line-height: 34px;
+}
+
+.card .help
+{
+	width: 210px;
+	font-size: 12px;
+	text-align: center;
+	margin: 0 0 0 0;
+
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.card > .more
+{
+	width: 152px;
+	height: 31px;
+
+	background-color: #383c53;
+	
+	margin: auto;
+	margin-top: 15px;
+	text-align: center;
+	vertical-align: middle;
+	line-height: 31px;
+
+	border-radius: 2px;
+}
