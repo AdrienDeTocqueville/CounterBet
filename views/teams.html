@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+	<body>
+		<h1>Teams</h1>
+		<br>
+		<table>
+			<tr>
+				<th>Name</th>
+			</tr>
+			{% for team in teams %}
+			<tr>
+				<td>{{team.name}}<td>
+			</tr>
+			{% endfor %}
+		</table>
+	</body>
+</html>
