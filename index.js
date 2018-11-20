@@ -4,26 +4,36 @@ var mongo = require("mongodb").MongoClient;
 const {HLTV} = require("hltv");
 
 var app = express();
+app.use(express.static('public'));
 
-nunjucks.configure('views', {
+nunjucks.configure("views", {
     autoescape: true,
     express: app
 
 });
 
-mongo.connect("mongodb://localhost/counterbet", {useNewUrlParser: true}, function(error, db) {
-	    if (error) return funcCallback(error);
-
-	    console.log("Connecté à la base de données !");
-
-});
-
-app.get('/', function(req, res) {
+function downloadMatches(collec)
+{
 	HLTV.getMatches().then(matches => {
-		res.render('index.html', {matches});
+		collec.insertMany(matches);
 	})
-}).get('/teams', function(req, res) {
+}
 
-	res.render('teams.html', {teams: [{name: "Astralis"}, {name: "Astralis"}]});
+mongo.connect("mongodb://127.0.0.1:27017", {useNewUrlParser: true}, function(error, client) {
+	if (error) return funcCallback(error);
+	const db = client.db("counterbet");
+	const matches = db.collection("matches");
+
+	console.log("Connecté à la base de données !");
+
+	//downloadMatches(matches);
+
+	app.get('/', function(req, res) {
+		matches.find().toArray().then(data => {
+			res.render('index.html', {matches: data});
+		});
+	}).get('/teams', function(req, res) {
+		res.render('teams.html', {teams: [{name: "Astralis"}, {name: "Astralis"}]});
+	});
+	app.listen(8080);
 });
-app.listen(8080);

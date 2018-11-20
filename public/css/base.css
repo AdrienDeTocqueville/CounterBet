@@ -1,0 +1,72 @@
+html, body
+{
+	font-family: 'Open Sans';
+	font-size: 20px;
+	
+	margin: 0;
+	
+	height: 100%;
+}
+
+a:link, a:visited
+{
+	color: inherit;
+	text-decoration: none;
+}
+
+body > header
+{
+	height: 6em;
+	color: white;
+	font-family: Segoe UI;
+	
+	background-color: #24292E;
+	
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	
+	box-shadow: 0 1px 12px 0 rgba(0,0,0,0.4);
+}
+
+#logo
+{
+	display: flex;
+	flex-direction: column;
+	font-size: 17px;
+	line-height: 35px;
+}
+
+#logo > img
+{
+	margin: 0 auto;
+}
+
+header > #right
+{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+header > #right > input
+{
+	background: none;
+	border: 0;
+	border-radius: 3px;
+	background-color: #404448;
+	padding: 8px;
+}
+
+.header-link
+{
+	font-size: 18px;
+	margin-left: 16px;
+}
+
+.rounded
+{
+	border: 1px solid #e1e4e8;
+	border-radius: 3px;
+	padding: 4px;
+}
