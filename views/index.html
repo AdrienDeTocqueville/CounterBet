@@ -11,9 +11,18 @@
 {% for match in matches %}
 <div class="match">
 	<header>
+
 		<span>{{ "Live" if match.live else "Soon" }}</span>
-		<span>@{{ date(match.date) }}</span>
+
+
+		<span>@
+			{% filter replace("Invalid Date", "En cours") %}
+				{{date( match.date) }}
+			{% endfilter %}
+		</span>
+
 		<span>Match #{{match.id}}</span>
+
 	</header>
 
 	<div>
