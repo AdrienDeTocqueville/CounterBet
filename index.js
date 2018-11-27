@@ -3,6 +3,8 @@ var nunjucks = require('nunjucks');
 var mongo = require("mongodb").MongoClient;
 const { HLTV } = require("hltv");
 
+let db = null;
+
 var app = express();
 app.use(express.static('public'));
 
@@ -18,11 +20,34 @@ function downloadMatches(collec) {
 	})
 }
 
+function dlTeam(id) {
+	HLTV.getTeam({id}).then(team => {
+		team = {
+			id,
+			name: team.name,
+			rank: team.rank,
+			players: team.players
+		}
+		db.collection("teams").insertOne(team);
+	})
+}
+
+function getTeam(id) {
+	db.collection("teams").findOne({id})
+	.then(team => {
+		if (team == null)
+			return dlTeam(id);
+		//resolve(
+	}).catch(err => {
+		console.log("err" + err);
+	});
+}
+
 mongo.connect("mongodb://127.0.0.1:27017", { useNewUrlParser: true })
 .then(client => {
 	console.log("Connected to database");
 
-	const db = client.db("counterbet");
+	db = client.db("counterbet");
 	const matches = db.collection("matches");
 
 	//downloadMatches(matches);
