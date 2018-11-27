@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		{% block title %}
+		<title>CounterBet</title>
+		{% endblock %}
+		<meta charset="utf-8" />
+		
+		<link rel="stylesheet" type="text/css" href="css/base.css">
+		{% block link %}
+		{% endblock %}
+	</head>
+  
+	<body>
+		<header>
+			<div id="logo">
+				<img src="img/logo.png" alt="SenseIT"/>
+				<a>Counter<strong>Bet</strong></a>
+			</div>
+			<div id="right">
+				<input type="text" placeholder="Seach CounterBet">
+				<a class="header-link" href="/login">Sign&nbsp;in</a>
+				<a class="header-link rounded" href="/login">Sign&nbsp;up</a>
+			</div>
+		</header>
+
+		{% block content %}
+		{% endblock %}
+	</body>
+</html>
+

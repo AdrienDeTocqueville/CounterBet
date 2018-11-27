@@ -1,29 +1,24 @@
-<html>
-	<head>
-		    <title>Nunjucks example</title>
-	</head>
-	<body>
-		<h1>Matches</h1>
-		<br>
-		<table>
-			<tr>
-				<th>ID</th>
-				<th>date</th>
-				<th>Team 1</th>
-				<th>Team 2</th>
-			</tr>
-			{% for match in matches %}
-			<tr>
-				<td>{{match.id}}</td>
-				{% if match.live %}
-					<td>Live !!</td>
-				{% else %}
-					<td>{{match.date}}</td>
-				{% endif %}
-				<td>{{match.team1.name}}</td>
-				<td>{{match.team2.name}}</td>
-			</tr>
-			{% endfor %}
-		</table>
-	</body>
-</html>
+{% extends "base.html" %}
+
+{% block link %}
+<link rel="stylesheet" type="text/css" href="css/match.css">
+{% endblock %}
+
+{% block content %}
+<h1>Upcoming matches</h1>
+<br>
+
+{% for match in matches %}
+<div class="match">
+	<header>
+		<span>{{ "Live" if match.live else "Soon" }}</span>
+		<span>@{{match.date}}</span>
+		<span>Match #{{match.id}}</span>
+	</header>
+
+	<div>
+		<p>{{match.team1.name}} VS {{match.team2.name}}</p>
+	</div>
+</div>
+{% endfor %}
+{% endblock %}
