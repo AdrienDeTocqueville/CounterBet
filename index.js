@@ -18,10 +18,9 @@ function downloadMatches(collec) {
 	})
 }
 
-mongo.connect("mongodb://127.0.0.1:27017", { useNewUrlParser: true }, function (error, client) {
-	if (error) return funcCallback(error);
+mongo.connect("mongodb://127.0.0.1:27017", { useNewUrlParser: true })
+.then(client => {
 	console.log("Connected to database");
-
 
 	const db = client.db("counterbet");
 	const matches = db.collection("matches");
@@ -30,7 +29,7 @@ mongo.connect("mongodb://127.0.0.1:27017", { useNewUrlParser: true }, function (
 
 	app.get('/', function (req, res) {
 		matches.find().toArray().then(data => {
-			res.render('index.html', { matches: data });
+			res.render('index.html', { matches: data, date: (d) => (new Date(d)) });
 		});
 	}).get('/teams', function (req, res) {
 		res.render('teams.html', { teams: [{ name: "Astralis" }, { name: "Astralis" }] });
@@ -38,4 +37,6 @@ mongo.connect("mongodb://127.0.0.1:27017", { useNewUrlParser: true }, function (
 	app.listen(8080);
 
 	console.log("Listening on port 8080 !");
+}).catch(error => {
+	console.log(error);
 });
