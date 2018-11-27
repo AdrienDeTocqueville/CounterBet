@@ -46,3 +46,8 @@ db.connect().then(() => {
 }).catch(error => {
 	console.log(error);
 });
+
+require('./model/Utilisateur');
+require('./model/Pari');
+app.use('/utilisateur', require('./routes/utilisateur'));
+app.use('/pari', require('./routes/pari'));

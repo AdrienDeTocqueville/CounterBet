@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1> Utilisateur </h1>
+
+{% for p in utilisateur %}
+<span> {{p.pseudo}} </span>
+
+{% endfor %}
+
+
+{% endblock %}
