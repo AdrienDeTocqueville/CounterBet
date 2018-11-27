@@ -30,10 +30,9 @@ function date(d) {
 	return d;
 }
 
-mongo.connect("mongodb://127.0.0.1:27017", { useNewUrlParser: true }, function (error, client) {
-	if (error) return error;
+mongo.connect("mongodb://127.0.0.1:27017", { useNewUrlParser: true })
+.then(client => {
 	console.log("Connected to database");
-
 
 	const db = client.db("counterbet");
 	const matches = db.collection("matches");
@@ -50,4 +49,6 @@ mongo.connect("mongodb://127.0.0.1:27017", { useNewUrlParser: true }, function (
 	app.listen(8080);
 
 	console.log("Listening on port 8080 !");
+}).catch(error => {
+	console.log(error);
 });

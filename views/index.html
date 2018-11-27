@@ -15,12 +15,11 @@
 		<span>{{ "Live" if match.live else "Soon" }}</span>
 
 
-
-		<span>@ {% filter replace("Invalid Date", "En cours") %}
-
-			{{date( match.date) }} {% endfilter %} </span>
-
-
+		<span>@
+			{% filter replace("Invalid Date", "En cours") %}
+				{{date( match.date) }}
+			{% endfilter %}
+		</span>
 
 		<span>Match #{{match.id}}</span>
 
