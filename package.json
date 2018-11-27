@@ -22,5 +22,8 @@
     "hltv": "^2.9.1",
     "mongodb": "^3.1.10",
     "nunjucks": "^3.1.4"
+  },
+  "devDependencies": {
+    "nunjucks-date-filter": "^0.1.1"
   }
 }

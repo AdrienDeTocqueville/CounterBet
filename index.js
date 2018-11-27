@@ -1,6 +1,8 @@
 var express = require('express');
 var nunjucks = require('nunjucks');
 var mongo = require("mongodb").MongoClient;
+
+
 const { HLTV } = require("hltv");
 
 var app = express();
@@ -12,14 +14,24 @@ nunjucks.configure("views", {
 
 });
 
+
 function downloadMatches(collec) {
 	HLTV.getMatches().then(matches => {
 		collec.insertMany(matches);
 	})
 }
 
+function date(d) {
+
+	var d = new Date(d);
+    var options = {  weekday: 'long', day: 'numeric' ,
+        month: 'numeric', hour:'numeric' ,minute : 'numeric'  };
+	var d= d.toLocaleDateString('en-GB', options);
+	return d;
+}
+
 mongo.connect("mongodb://127.0.0.1:27017", { useNewUrlParser: true }, function (error, client) {
-	if (error) return funcCallback(error);
+	if (error) return error;
 	console.log("Connected to database");
 
 
@@ -30,7 +42,7 @@ mongo.connect("mongodb://127.0.0.1:27017", { useNewUrlParser: true }, function (
 
 	app.get('/', function (req, res) {
 		matches.find().toArray().then(data => {
-			res.render('index.html', { matches: data });
+			res.render('index.html', { matches: data , date : (d) => ( date(d)) });
 		});
 	}).get('/teams', function (req, res) {
 		res.render('teams.html', { teams: [{ name: "Astralis" }, { name: "Astralis" }] });
