@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block link %}
+<link rel="stylesheet" type="text/css" href="/css/match.css">
+{% endblock %}
+
+{% block content %}
+<h1>{{title}}</h1>
+<p>{{team1.name}} VS {{team2.name}}</p>
+<br>
+
+<p> {{winner}} </p>
+<p> {{date}} </p>
+<p> {{cote}} </p>
+<p> {{tournament | dump}} </p>
+<p> {{streams | dump}} </p>
+<p> {{format}} </p>
+
+{% endblock %}

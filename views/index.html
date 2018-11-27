@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block link %}
-<link rel="stylesheet" type="text/css" href="css/match.css">
+<link rel="stylesheet" type="text/css" href="/css/match.css">
 {% endblock %}
 
 {% block content %}
@@ -26,7 +26,7 @@
 	</header>
 
 	<div>
-		<p>{{match.team1.name}} VS {{match.team2.name}}</p>
+		<a href="match/{{match.id}}">{{match.team1.name}} VS {{match.team2.name}}</a>
 		<img src="https://static.hltv.org/images/team/logo/{{match.team1.id}}">
 		<img src="https://static.hltv.org/images/team/logo/{{match.team2.id}}">
 	</div>
