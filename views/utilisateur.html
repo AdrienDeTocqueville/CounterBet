@@ -4,8 +4,25 @@
 
 <h1> Utilisateur </h1>
 
-{% for p in Utilisateur %}
-<span> {{p.pseudo}} </span>
+{% for p in utilisateurs %}
+<p> {{p.pseudo}} </p>
+<p> {{p.points}} </p>
+<p> {{p.mail}}</p>
+
+
+<h1> Vos Paris</h1>
+{% for t in p.paris %}
+<h2>{{t.teams1}} vs {{t.teams2}} </h2>
+{% if t.info == 1 %}
+<h4>Gagné</h4>
+<span class="label label.default">{{t.point}} points </span>
+{% else %}
+<h4>Perdu</h4>
+<span class="label label.default">0 points </span>
+{% endif %}
+
+
+{% endfor %}
 
 {% endfor %}
 

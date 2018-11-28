@@ -79,7 +79,16 @@ function connect() {
 		return client;
 	});
 }
-
+function getUtilisateur(pseu) {
+    return db.collection("utilisateur").findOne({pseudo:pseu})
+	.then(res => {
+        if (res == null)
+    		return db.collection("utilisateurs").find().sort({id: 1}).limit(10).toArray();
+    return res;
+}).catch(err => {
+        console.log(err);
+});
+}
 
 module.exports = {
 	downloadMatches,
@@ -87,6 +96,6 @@ module.exports = {
 	getUpcomingMatches,
 	getMatch,
 	getTeam,
-	
+    getUtilisateur,
 	connect
 };

@@ -40,6 +40,7 @@ function listutilisateur(){
     return UtilisateurModel;
 }
 var Utilisateur = listutilisateur();
+
 db.connect().then(() => {
 	db.downloadMatches().then(values => {
 		console.log("Updated match database")
@@ -59,8 +60,8 @@ db.connect().then(() => {
 		db.getMatch(req.params.match).then(match => {
 			res.render('match.html', match);
 		});
-	}).get('/utilisateur', function(req,res) {
-        Utilisateur.find({}).populate('paris').then(utilisateurs => {
+	}).get('/utilisateur/:uti', function(req,res) {
+		db.getUtilisateur(req.params.uti).then(utilisateurs => {
             res.render('utilisateur.html', {utilisateurs: utilisateurs});
     	});
 	});
