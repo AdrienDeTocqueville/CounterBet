@@ -3,11 +3,10 @@ const mongo = require('mongoose');
 var pariSchema = new mongo.Schema({
     pointpari : Number,
     equipepari : Number,
-
 });
 
 pariSchema.virtual('utilisateurs', {
-    ref : 'utilisateur',
+    ref : 'Utilisateur',
     localField : '_id',
     foreignField : 'paris'
 })

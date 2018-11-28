@@ -4,6 +4,7 @@ const nunjucks = require('nunjucks');
 const db = require("./db.js");
 
 var app = express();
+
 app.use(express.static('public'));
 
 nunjucks.configure("views", {
@@ -20,6 +21,25 @@ function date(d) {
 	return d;
 }
 
+function listutilisateur(){
+    const mongo = require('mongoose');
+
+    var utilisateurSchema = new mongo.Schema({
+        pseudo : String,
+        points : Number,
+        mail : String,
+        paris : [
+            {
+                type : mongo.Schema.Types.ObjectId,
+                ref : "PariModel"
+            }
+        ]
+    });
+
+    var UtilisateurModel = mongo.model('UtilisateurModel', utilisateurSchema);
+    return UtilisateurModel;
+}
+var Utilisateur = listutilisateur();
 db.connect().then(() => {
 	db.downloadMatches().then(values => {
 		console.log("Updated match database")
@@ -39,6 +59,10 @@ db.connect().then(() => {
 		db.getMatch(req.params.match).then(match => {
 			res.render('match.html', match);
 		});
+	}).get('/utilisateur', function(req,res) {
+        Utilisateur.find({}).populate('paris').then(utilisateurs => {
+            res.render('utilisateur.html', {utilisateurs: utilisateurs});
+    	});
 	});
 	app.listen(8080);
 
@@ -47,7 +71,4 @@ db.connect().then(() => {
 	console.log(error);
 });
 
-require('./model/Utilisateur');
-require('./model/Pari');
-app.use('/utilisateur', require('./routes/utilisateur'));
-app.use('/pari', require('./routes/pari'));
+

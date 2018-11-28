@@ -6,8 +6,8 @@ var utilisateurSchema = new mongo.Schema({
     mail : String,
     paris : [
         {
-            pari : mongo.Schema.Types.ObjectId,
-            ref : 'PariModel'
+            type : mongo.Schema.Types.ObjectId,
+            ref : "PariModel"
         }
     ]
 });
