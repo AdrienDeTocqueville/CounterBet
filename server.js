@@ -64,7 +64,10 @@ db.connect().then(() => {
 		db.getUtilisateur(req.params.uti).then(utilisateurs => {
             res.render('utilisateur.html', {utilisateurs: utilisateurs});
     	});
-	});
+	}).get('/login', function(req,res) {
+            res.render('login.html');
+    	});
+
 	app.listen(8080);
 
 	console.log("Listening on port 8080 !");
