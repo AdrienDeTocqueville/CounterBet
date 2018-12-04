@@ -38,9 +38,12 @@ db.connect().then(() => {
 			res.render('user.html', {user});
 		else
 			res.render('404.html');
-	});
-	app.listen(8080);
+	})
+	.get('/login', function(req,res) {
+            res.render('login.html');
+    	});
 
+	app.listen(8080);
 	console.log("Listening on port 8080 !");
 }).catch(error => {
 	console.log(error);
