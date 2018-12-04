@@ -13,8 +13,8 @@ function downloadMatches() {
 	});
 }
 
-function downloadMatch(id) {
-	return HLTV.getMatch({id}).then(match => ({
+async function downloadMatch(id) {
+	let match = await HLTV.getMatch({id}).then(match => ({
 		id: id,
 		title: match.title,
 		team1: match.team1,
@@ -25,69 +25,61 @@ function downloadMatch(id) {
 		tournament: match.event,
 		streams: match.streams,
 		format: match.format
-	})).then(match => {
-		db.collection("matches").insertOne(match)
-		return match;
-	});
+	}));
+	
+	db.collection("matches").insertOne(match);
+	return match;
 }
 
-function downloadTeam(id) {
-	return HLTV.getTeam({id}).then(team => ({
+async function downloadTeam(id) {
+	let team = await HLTV.getTeam({id}).then(team => ({
 		id: id,
 		name: team.name,
 		rank: team.rank,
 		players: team.players
-	})).then(team => {
-		db.collection("teams").insertOne(team)
-		return team;
-	});
+	}));
+	
+	db.collection("teams").insertOne(team);
+	return team;
 }
 
 
 function getUpcomingMatches(max) {
-	return db.collection("matches").find().sort({id: 1}).limit(max || 10).toArray();
+	return db.collection("matches")
+		.find({date: {$gt: Date.now()}})
+		.sort({date: 1})
+		.limit(max || 10)
+		.toArray();
 }
 
-function getMatch(id) {
-	return db.collection("matches").findOne({id})
-	.then(res => {
-		if (res == null)
-			return downloadMatch(id);
-		return res;
-	}).catch(err => {
-		console.log(err);
-	});
+async function getMatch(id) {
+	let match = await db.collection("matches").findOne({id});
+	return match || downloadMatch(id);
 }
 
-function getTeam(id) {
-	return db.collection("teams").findOne({id})
-	.then(res => {
-		if (res == null)
-			return downloadTeam(id);
-		return res;
-	}).catch(err => {
-		console.log(err);
-	});
+async function getTeam(id) {
+	let team = await db.collection("teams").findOne({id});
+	return team || downloadTeam(id);
 }
 
+function getUser(username) {
+	return db.collection("utilisateur").findOne({username});
+}
 
-function connect() {
-	return mongo.connect("mongodb://127.0.0.1:27017", { useNewUrlParser: true }).then(client => {
-		db = client.db("counterbet");
+async function connect(url) {
+	url = url || "mongodb://127.0.0.1:27017";
 
+	try {
+		let client = await mongo.connect(url, { useNewUrlParser: true });
 		console.log("Connected to database");
+
+		db = client.db("counterbet");
 		return client;
-	});
-}
-function getUtilisateur(pseu) {
-    return db.collection("utilisateur").findOne({pseudo:pseu})
-	.then(res => {
-        if (res == null)
-    		return db.collection("utilisateurs").find().sort({id: 1}).limit(10).toArray();
-    return res;
-}).catch(err => {
-        console.log(err);
-});
+	}
+	catch (e) {
+		console.log("Could not connect to database");
+		console.log(e);
+	}
 }
 
 module.exports = {
@@ -96,6 +88,7 @@ module.exports = {
 	getUpcomingMatches,
 	getMatch,
 	getTeam,
-    getUtilisateur,
+	getUser,
+
 	connect
 };

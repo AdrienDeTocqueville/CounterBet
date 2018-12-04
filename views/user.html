@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+<h1> Utilisateur </h1>
+<p> {{  user | dump('\t') }} </p>
+
+
+<h1> Vos Paris</h1>
+{% for bet in user.bets %}
+	<h2>{{bet.teams1}} vs {{bet.teams2}} </h2>
+
+	{% if bet.info == 1 %}
+		<h4>Gagné</h4>
+		<span class="label label.default">{{bet.point}} points </span>
+	{% else %}
+		<h4>Perdu</h4>
+		<span class="label label.default">0 points </span>
+	{% endif %}
+
+{% endfor %}
+
+
+{% endblock %}
