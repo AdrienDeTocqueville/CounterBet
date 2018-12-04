@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block link %}
+<link rel="stylesheet" type="text/css" href="/css/match.css">
+{% endblock %}
+
+{% block content %}
+
+<h1>{{ tournament.name }}</h1>
+<h2>From {{ date(tournament.startDate) }} until {{ date(tournament.endDate) }}</h2>
+
+<p style="white-space:pre-wrap;"> {{ tournament | dump('\t') }} </p>
+
+{% endblock %}

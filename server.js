@@ -16,12 +16,6 @@ nunjucks.configure("views", {
 });
 
 db.connect().then(() => {
-	db.downloadMatches().then(values => {
-		console.log("Updated match database")
-	}).catch(error => {
-		console.log(error)
-	});
-
 	app.get('/', async function (req, res) {
 		let matches = await db.getUpcomingMatches();
 		res.render('index.html', { matches, date: time.toString});
@@ -32,7 +26,11 @@ db.connect().then(() => {
 	})
 	.get('/match/:match', async function (req, res) {
 		let match = await db.getMatch(req.params.match);
-		res.render('match.html', matchUtils.process(match));
+		res.render('match.html', {match: matchUtils.process(match), date: time.toString});
+	})
+	.get('/tournament/:tournament', async function (req, res) {
+		let tournament = await db.getTournament(req.params.tournament);
+		res.render('tournament.html', {tournament, date: time.toString});
 	})
 	.get('/user/:username', async function(req,res) {
 		let user = await db.getUser(req.params.username);
@@ -46,7 +44,7 @@ db.connect().then(() => {
     	});
 
 	app.listen(8080);
-	console.log("Listening on port 8080 !");
+	console.log("\x1b[33mListening on port 8080 !\x1b[0m");
 }).catch(error => {
 	console.log(error);
 });
