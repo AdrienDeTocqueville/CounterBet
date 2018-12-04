@@ -5,6 +5,7 @@ const db = require("./db.js");
 const time = require("./time.js");
 
 var app = express();
+
 app.use(express.static('public'));
 
 nunjucks.configure("views", {
@@ -30,6 +31,13 @@ db.connect().then(() => {
 	.get('/match/:match', async function (req, res) {
 		let match = await db.getMatch(req.params.match);
 		res.render('match.html', {match});
+	})
+	.get('/user/:username', async function(req,res) {
+		let user = await db.getUser(req.params.username);
+		if (user)
+			res.render('user.html', {user});
+		else
+			res.render('404.html');
 	});
 	app.listen(8080);
 
@@ -37,3 +45,5 @@ db.connect().then(() => {
 }).catch(error => {
 	console.log(error);
 });
+
+

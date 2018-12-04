@@ -45,7 +45,11 @@ async function downloadTeam(id) {
 
 
 function getUpcomingMatches(max) {
-	return db.collection("matches").find({date: {$gt: Date.now()}}).sort({date: 1}).limit(max || 10).toArray();
+	return db.collection("matches")
+		.find({date: {$gt: Date.now()}})
+		.sort({date: 1})
+		.limit(max || 10)
+		.toArray();
 }
 
 async function getMatch(id) {
@@ -58,6 +62,9 @@ async function getTeam(id) {
 	return team || downloadTeam(id);
 }
 
+function getUser(username) {
+	return db.collection("utilisateur").findOne({username});
+}
 
 async function connect(url) {
 	url = url || "mongodb://127.0.0.1:27017";
@@ -75,13 +82,13 @@ async function connect(url) {
 	}
 }
 
-
 module.exports = {
 	downloadMatches,
 
 	getUpcomingMatches,
 	getMatch,
 	getTeam,
-	
+	getUser,
+
 	connect
 };
