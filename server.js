@@ -3,6 +3,7 @@ const nunjucks = require('nunjucks');
 
 const db = require("./db.js");
 const time = require("./time.js");
+const matchUtils = require("./match.js");
 
 var app = express();
 
@@ -10,6 +11,7 @@ app.use(express.static('public'));
 
 nunjucks.configure("views", {
 	autoescape: true,
+	noCache: true,
 	express: app
 });
 
@@ -30,7 +32,7 @@ db.connect().then(() => {
 	})
 	.get('/match/:match', async function (req, res) {
 		let match = await db.getMatch(req.params.match);
-		res.render('match.html', {match});
+		res.render('match.html', matchUtils.process(match));
 	})
 	.get('/user/:username', async function(req,res) {
 		let user = await db.getUser(req.params.username);

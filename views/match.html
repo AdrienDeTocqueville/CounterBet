@@ -7,8 +7,22 @@
 {% block content %}
 <h1>{{match.title}}</h1>
 <p>{{match.team1.name}} VS {{match.team2.name}}</p>
+<a href="../tournament/{{match.tournament.id}}">Tournament: {{match.tournament.name}}</a>
 <br>
 
-<p> {{match | dump}} </p>
+
+{% if streamURL %}
+	<iframe
+		src={{streamURL}}
+		height=340px
+		width=570px
+		frameborder="<frameborder>"
+		scrolling="<scrolling>"
+		allowfullscreen="<allowfullscreen>">
+	</iframe>
+{% endif %}
+
+<p style="white-space:pre-wrap;"> {{ match | dump('\t') }} </p>
+<p style="white-space:pre-wrap;"> {{ streamURL | dump('\t') }} </p>
 
 {% endblock %}
