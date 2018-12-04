@@ -2,6 +2,7 @@ const express = require('express');
 const nunjucks = require('nunjucks');
 
 const db = require("./db.js");
+const time = require("./time.js");
 
 var app = express();
 app.use(express.static('public'));
@@ -9,16 +10,7 @@ app.use(express.static('public'));
 nunjucks.configure("views", {
 	autoescape: true,
 	express: app
-
 });
-
-function date(d) {
-	var d = new Date(d);
-	var options = {  weekday: 'long', day: 'numeric' ,
-        month: 'numeric', hour:'numeric' ,minute : 'numeric'  };
-	var d= d.toLocaleDateString('en-GB', options);
-	return d;
-}
 
 db.connect().then(() => {
 	db.downloadMatches().then(values => {
@@ -29,7 +21,7 @@ db.connect().then(() => {
 
 	app.get('/', async function (req, res) {
 		let matches = await db.getUpcomingMatches();
-		res.render('index.html', { matches , date : (d) => ( date(d)) });
+		res.render('index.html', { matches, date: time.toString});
 	})
 	.get('/teams/:team', async function (req, res) {
 		let team = await db.getTeam(req.params.team);
