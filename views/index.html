@@ -25,10 +25,28 @@
 
 	</header>
 
-	<div>
-		<a href="match/{{match.id}}">{{match.team1.name}} VS {{match.team2.name}}</a>
-		<img src="https://static.hltv.org/images/team/logo/{{match.team1.id}}">
-		<img src="https://static.hltv.org/images/team/logo/{{match.team2.id}}">
+	<div class="match-List">
+		<a href="match/{{match.id}}">
+			<div class="match-header">
+
+			</div>
+			<div class="match-container">
+				<div class="match-teams">
+					<div class="match-teams-logo">
+						<img src="https://static.hltv.org/images/team/logo/{{match.team1.id}}" alt="HAVU">
+						{{match.team1.name}}
+					</div>
+					<div class="match-type">
+							VS
+						</div>
+						<div class="match-teams-logo">
+							<img src="https://static.hltv.org/images/team/logo/{{match.team2.id}}" alt="HAVU">
+							{{match.team2.name}}
+					</div>
+					<div style="clear:both;"></div>
+				</div>
+			</div>
+		</a>
 	</div>
 </div>
 {% endfor %}

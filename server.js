@@ -10,6 +10,7 @@ app.use(express.static('public'));
 
 nunjucks.configure("views", {
 	autoescape: true,
+	noCache: true,
 	express: app
 });
 
