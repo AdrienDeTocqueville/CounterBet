@@ -1,7 +1,6 @@
 const express = require('express');
 const nunjucks = require('nunjucks');
 const bodyParser = require("body-parser");
-const crypto = require("crypto");
 const db = require("./db.js");
 const time = require("./time.js");
 const matchUtils = require("./match.js");
@@ -53,10 +52,10 @@ db.connect().then(() => {
 		else
 			res.render('404.html');
 	})
-	.get('/login', function (req, res) {
-		res.render('login.html');
+	.get('/register', function (req, res) {
+		res.render('register.html');
 	})
-	.post('/post-feedback', async function (req, res) {
+	.post('/register', async function (req, res) {
 		delete req.body._id; // for safety reasons
 		let username = await db.register(req.body);
 		if (username) {

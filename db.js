@@ -1,6 +1,6 @@
 const mongo = require("mongodb").MongoClient;
 const { HLTV } = require("hltv");
-
+const crypto = require("crypto");
 let db = null;
 
 async function updateMatches(ids) {
@@ -112,7 +112,7 @@ async function connect(url, refreshTime) {
 		return null;
 	}
 
-	updateDB();
+	//updateDB();
 	//setInterval(updateDB, refreshTime);
 
 	return client;
@@ -145,7 +145,16 @@ function updateDB() {
 
 async function register(a) {
 	try {
-		var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+		let re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+		console.log(a);
+		let algorithm = 'aes256';
+		let password = 'l5JmP+G0/1zB%;r8B8?2?2pcqGcL^3';
+		let cipher = crypto.createCipher(algorithm,password);
+		let crypted = cipher.update(a.mdp,'utf8','hex');
+		crypted += cipher.final('hex');
+		a.mdp =crypted;
+		a.confirm =crypted;
+		console.log(a);
 		let res = await db.collection('users').insertOne(a);
 		if(res.result.ok == 1){
 		return a.username;
