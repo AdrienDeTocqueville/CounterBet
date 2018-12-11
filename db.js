@@ -145,8 +145,8 @@ function updateDB() {
 
 async function register(a) {
 	try {
+		var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 		let res = await db.collection('users').insertOne(a);
-		console.log(a.username);
 		if(res.result.ok == 1){
 		return a.username;
 		}

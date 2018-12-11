@@ -12,7 +12,7 @@
 
 
 
-    <form  method="post" action="/post-feedback" name="inscription" onsubmit="return(NonVideProfil())">
+    <form  method="post" action="/post-feedback" name="inscription" >
         <label>Your Username:</label>
         <input type="text" autocomplete="on" name="username" placeholder="username" required /><br/>
         <label>Your Password:</label>
@@ -21,7 +21,7 @@
         <input type="password" name="confirm"  placeholder="Confirm" required/><br/>
         <label>Your email address:</label>
         <input type="email" autocomplete="on" name="mail" placeholder="email" maxlength="64" required /><br />
-        <input type="submit" value="Submit" />
+        <input type="submit" value="Submit" onclick="validate()"/>
     </form>
     <div></div>
 
