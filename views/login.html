@@ -2,32 +2,32 @@
 <html>
 	<head>
 		<title>Login - CounterBet</title>
-        <meta charset="utf-8" />
-        <script type="text/javascript" src="/js/login.js"></script>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" type="text/css" href="/css/login.css">
+		<script type="text/javascript" src="/js/login.js"></script>
 	</head>
 
-    <body>
-    <h1> Sign in to Counter Bet</h1>
+	<body>
+		<div class="container">
+			<div id="login-card">
+				<a>
+					<img width="50px" src="/img/logo.png" alt="">
+				</a>
+				<form method="post" name="inscription">
+					<div class="login-form">
+						<h6>Email</h6>
+						<input name="mail" type="email" placeholder="Enter email address">
+					</div>
+					<div class="login-form">
+						<h6>Password</h6>
+						<input name="password" type="password" placeholder="Enter password">
+					</div>
+					<div class="login-button-container">
+						<input type="submit" value="Submit" />
+					</div>
+				</form>
+			</div>
 
-
-
-
-    <form  method="post" action="/post-feedback" name="inscription" onsubmit="return(NonVideProfil())">
-        <label>Your Username:</label>
-        <input type="text" autocomplete="on" name="username" placeholder="username" required /><br/>
-        <label>Your Password:</label>
-        <input type="password" name="mdp" placeholder="Password" required/><br/>
-        <label>Confirm :</label>
-        <input type="password" name="confirm"  placeholder="Confirm" required/><br/>
-        <label>Your email address:</label>
-        <input type="email" autocomplete="on" name="mail" placeholder="email" maxlength="64" required /><br />
-        <input type="submit" value="Submit" />
-    </form>
-    <div></div>
-
-
-
-
-
-    </body>
+		</div>
+	</body>
 </html>
