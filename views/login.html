@@ -2,23 +2,32 @@
 <html>
 	<head>
 		<title>Login - CounterBet</title>
-		<meta charset="utf-8" />
+        <meta charset="utf-8" />
+        <script type="text/javascript" src="/js/login.js"></script>
 	</head>
 
     <body>
     <h1> Sign in to Counter Bet</h1>
 
-    <form method="post" name="inscription">
+
+
+
+    <form  method="post" action="/post-feedback" name="inscription" onsubmit="return(NonVideProfil())">
         <label>Your Username:</label>
-        <input type="text" autocomplete="on" name="Username" placeholder="Username" /><br/>
+        <input type="text" autocomplete="on" name="username" placeholder="username" required /><br/>
         <label>Your Password:</label>
-        <input type="password" name="mdp" placeholder="Password" /><br/>
+        <input type="password" name="mdp" placeholder="Password" required/><br/>
         <label>Confirm :</label>
-        <input type="password" name="confirm"  placeholder="Confirm" /><br/>
+        <input type="password" name="confirm"  placeholder="Confirm" required/><br/>
         <label>Your email address:</label>
-        <input type="text" autocomplete="on" name="mail" placeholder="email" maxlength="64" /><br />
+        <input type="email" autocomplete="on" name="mail" placeholder="email" maxlength="64" required /><br />
+        <input type="submit" value="Submit" />
     </form>
     <div></div>
+
+
+
+
 
     </body>
 </html>

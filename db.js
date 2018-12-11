@@ -8,13 +8,13 @@ function downloadMatches() {
 		let updates = [];
 		let collec = db.collection("matches");
 		for (match of matches)
-			updates.push(collec.updateOne({ id: match.id }, {$set: match}, { upsert: true }));
+			updates.push(collec.updateOne({ id: match.id }, { $set: match }, { upsert: true }));
 		return Promise.all(updates);
 	});
 }
 
 async function downloadMatch(id) {
-	let match = await HLTV.getMatch({id}).then(match => ({
+	let match = await HLTV.getMatch({ id }).then(match => ({
 		id: id,
 		title: match.title,
 		team1: match.team1,
@@ -26,19 +26,19 @@ async function downloadMatch(id) {
 		streams: match.streams,
 		format: match.format
 	}));
-	
+
 	db.collection("matches").insertOne(match);
 	return match;
 }
 
 async function downloadTeam(id) {
-	let team = await HLTV.getTeam({id}).then(team => ({
+	let team = await HLTV.getTeam({ id }).then(team => ({
 		id: id,
 		name: team.name,
 		rank: team.rank,
 		players: team.players
 	}));
-	
+
 	db.collection("teams").insertOne(team);
 	return team;
 }
@@ -46,24 +46,24 @@ async function downloadTeam(id) {
 
 function getUpcomingMatches(max) {
 	return db.collection("matches")
-		.find({date: {$gt: Date.now()}})
-		.sort({date: 1})
+		.find({ date: { $gt: Date.now() } })
+		.sort({ date: 1 })
 		.limit(max || 10)
 		.toArray();
 }
 
 async function getMatch(id) {
-	let match = await db.collection("matches").findOne({id});
+	let match = await db.collection("matches").findOne({ id });
 	return match || downloadMatch(id);
 }
 
 async function getTeam(id) {
-	let team = await db.collection("teams").findOne({id});
+	let team = await db.collection("teams").findOne({ id });
 	return team || downloadTeam(id);
 }
 
 function getUser(username) {
-	return db.collection("utilisateur").findOne({username});
+	return db.collection("utilisateurs").findOne({ username });
 }
 
 async function connect(url) {
@@ -82,6 +82,20 @@ async function connect(url) {
 	}
 }
 
+async function register(a) {
+	try {
+		let res = await db.collection('utilisateurs').insertOne(a);
+		console.log(a.username);
+		if(res.result.ok == 1){
+		return a.username;
+		}
+	}
+	catch(e){
+		console.log("Could not find Username");
+		console.log(e);
+	}
+}
+
 module.exports = {
 	downloadMatches,
 
@@ -89,6 +103,8 @@ module.exports = {
 	getMatch,
 	getTeam,
 	getUser,
+
+	register,
 
 	connect
 };
