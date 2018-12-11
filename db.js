@@ -143,6 +143,19 @@ function updateDB() {
 	})
 }
 
+async function register(a) {
+	try {
+		let res = await db.collection('users').insertOne(a);
+		console.log(a.username);
+		if(res.result.ok == 1){
+		return a.username;
+		}
+	}
+	catch(e){
+		console.log("Could not find Username");
+		console.log(e);
+	}
+}
 
 module.exports = {
 	getUpcomingMatches,
@@ -150,6 +163,8 @@ module.exports = {
 	getMatch,
 	getTeam,
 	getUser,
+
+	register,
 
 	connect
 };
