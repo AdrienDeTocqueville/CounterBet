@@ -76,17 +76,23 @@ function getUpcomingMatches(max) {
 }
 
 async function getTournament(id) {
-	let tournament = await db.collection("tournaments").findOne({id: parseInt(id)});
+	if (isNaN(id = parseInt(id)))
+		return null;
+	let tournament = await db.collection("tournaments").findOne({id});
 	return tournament || downloadTournament(id);
 }
 
 async function getMatch(id) {
-	let match = await db.collection("matches").findOne({id: parseInt(id)});
+	if (isNaN(id = parseInt(id)))
+		return null;
+	let match = await db.collection("matches").findOne({id});
 	return match || downloadMatch(id);
 }
 
 async function getTeam(id) {
-	let team = await db.collection("teams").findOne({id: parseInt(id)});
+	if (isNaN(id = parseInt(id)))
+		return null;
+	let team = await db.collection("teams").findOne({id});
 	return team || downloadTeam(id);
 }
 
@@ -112,7 +118,7 @@ async function connect(url, refreshTime) {
 		return null;
 	}
 
-	updateDB();
+	//updateDB();
 	//setInterval(updateDB, refreshTime);
 
 	return client;

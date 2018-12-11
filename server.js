@@ -21,39 +21,50 @@ nunjucks.configure("views", {
 	express: app
 });
 
+function try_goto(condition, res, name, ctx)
+{
+	if (condition)
+		res.render(name, ctx);
+	else
+		res.render('404.html');
+}
+
 db.connect().then(() => {
 	app.get('/', async function (req, res) {
 		let matches = await db.getUpcomingMatches();
-		res.render('index.html', { matches, date: time.toString});
+		try_goto(matches, res, 'index.html', { matches, date: time.toString });
 	})
 	.get('/team/:team', async function (req, res) {
 		let team = await db.getTeam(req.params.team);
-		res.render('team.html', {team});
+		try_goto(team, res, 'team.html', {team});
 	})
 	.get('/match/:match', async function (req, res) {
-		let match = await db.getMatch(req.params.match);
-		res.render('match.html', {match: matchUtils.process(match), date: time.toString});
+		let match = matchUtils.process(await db.getMatch(req.params.match));
+		try_goto(match, res, 'match.html', { match, date: time.toString });
 	})
 	.get('/tournament/:tournament', async function (req, res) {
 		let tournament = await db.getTournament(req.params.tournament);
-		res.render('tournament.html', {tournament, date: time.toString});
+		try_goto(tournament, res, 'tournament.html', {tournament, date: time.toString});
 	})
 	.get('/teams/:team', async function (req, res) {
 		let team = await db.getTeam(req.params.team);
-		res.render('team.html', { team });
+		try_goto(team, res, 'team.html', { team });
 	})
 	.get('/match/:match', async function (req, res) {
 		let match = await db.getMatch(req.params.match);
-		res.render('match.html', { match });
+		try_goto(match, res, 'match.html', { match });
 	})
 	.get('/user/:username', async function (req, res) {
 		let user = await db.getUser(req.params.username);
-		if (user)
-			res.render('user.html', { user });
-		else
-			res.render('404.html');
+		try_goto(user, res, 'user.html', { user });
 	})
-	.get('/login', function (req, res) {
+	.get('/leaderboard', async function (req, res) {
+		res.render('leaderboard.html');
+	})
+	.get('/calendar', async function (req, res) {
+		res.render('leaderboard.html');
+	})
+	.get('/login', async function (req, res) {
 		res.render('login.html');
 	})
 	.post('/post-feedback', async function (req, res) {
@@ -64,6 +75,9 @@ db.connect().then(() => {
 		}
 
 	})
+
+
+	app.get('/*', () => {res.render('404.html');});
 
 	app.listen(8080);
 	console.log("\x1b[33mListening on port 8080 !\x1b[0m");

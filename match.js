@@ -9,9 +9,12 @@ function getStreamUrl(match) {
 }
 
 function process(match) {
-	match.streamURL = getStreamUrl(match);
-	match.stream = undefined;
-	return match;
+	if (match)
+	{
+		match.streamURL = getStreamUrl(match);
+		match.stream = undefined;
+		return match;
+	}
 }
 
 module.exports = {
