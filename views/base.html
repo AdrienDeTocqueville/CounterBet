@@ -14,13 +14,23 @@
 	<body>
 		<header>
 			<div id="logo">
-				<img src="/img/logo.png" alt="CounterBet"/>
+				<a href="/"><img src="/img/logo.png" alt="CounterBet"/></a>
 				<a>Counter<strong>Bet</strong></a>
 			</div>
-			<div id="right">
-				<input type="text" placeholder="Seach CounterBet">
-				<a class="header-link" href="/login">Sign&nbsp;in</a>
-				<a class="header-link rounded" href="/login">Sign&nbsp;up</a>
+			<div id="link">
+				<div if="left">
+					<a class="header-link" href="/login">Leaderboard</a>
+					<a class="header-link" href="/login">Calendar</a>
+				</div>
+				<div id="right">
+					<input type="text" placeholder="Seach CounterBet">
+					{% if user %}
+					<a class="header-link">Bonjour {{user.username}}</a>
+					{% else %}
+					<a class="header-link" href="/login">Sign&nbsp;in</a>
+					<a class="header-link rounded" href="/register">Sign&nbsp;up</a>
+					{% endif %}
+				</div>
 			</div>
 		</header>
 

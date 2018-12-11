@@ -8,13 +8,13 @@
 <h1>{{match.title}}</h1>
 <p>{{match.team1.name}} VS {{match.team2.name}}</p>
 <p>{{date(match.date)}}</p>
-<a href="../tournament/{{match.tournament.id}}">Tournament: {{match.tournament.name}}</a>
+<a href="/tournament/{{match.tournament.id}}">Tournament: {{match.tournament.name}}</a>
 <br>
 
 
-{% if streamURL %}
+{% if match.streamURL %}
 	<iframe
-		src={{streamURL}}
+		src="{{match.streamURL}}"
 		height="340px"
 		width="570px"
 		frameborder="0"
@@ -24,6 +24,5 @@
 {% endif %}
 
 <p style="white-space:pre-wrap;"> {{ match | dump('\t') }} </p>
-<p style="white-space:pre-wrap;"> {{ streamURL | dump('\t') }} </p>
 
 {% endblock %}
