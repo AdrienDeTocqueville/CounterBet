@@ -9,6 +9,14 @@
 <h1>{{ tournament.name }}</h1>
 <h2>From {{ date(tournament.startDate) }} until {{ date(tournament.endDate) }}</h2>
 
+<ul>
+	{% for team in tournament.teams %}
+	<li>
+		<a href="/team/{{team.id}}">{{team.name}}</a>
+	</li>
+	{% endfor %}
+</ul>
+
 <p style="white-space:pre-wrap;"> {{ tournament | dump('\t') }} </p>
 
 {% endblock %}

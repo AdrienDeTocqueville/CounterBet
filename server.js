@@ -26,7 +26,7 @@ db.connect().then(() => {
 		let matches = await db.getUpcomingMatches();
 		res.render('index.html', { matches, date: time.toString});
 	})
-	.get('/teams/:team', async function (req, res) {
+	.get('/team/:team', async function (req, res) {
 		let team = await db.getTeam(req.params.team);
 		res.render('team.html', {team});
 	})
