@@ -34,7 +34,11 @@
 	font-weight: 700;
 }
 
+<<<<<<< HEAD
 .match div > img
+=======
+.match  div > img
+>>>>>>> origin/Franck
 {
 	width: 64px;
 }

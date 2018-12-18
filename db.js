@@ -1,6 +1,6 @@
 const mongo = require("mongodb").MongoClient;
 const { HLTV } = require("hltv");
-
+const crypto = require("crypto");
 let db = null;
 
 async function updateMatches(ids) {
@@ -149,18 +149,37 @@ function updateDB() {
 	})
 }
 
-async function register(a) {
-	try {
-		let res = await db.collection('users').insertOne(a);
-		console.log(a.username);
-		if(res.result.ok == 1){
-		return a.username;
+function verifyRegister(user) {
+	const mailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+	if (!user.mail.match(mailRegex))
+		return null;
+	if (user.password != user.confirm)
+		return null;
+
+	let algorithm = 'aes256';
+	let password = 'l5JmP+G0/1zB%;r8B8?2?2pcqGcL^3';
+	let cipher = crypto.createCipher(algorithm, password);
+	user.password = cipher.update(user.password, 'utf8', 'hex') + cipher.final('hex');
+	delete user._id;
+	delete user.confirm;
+
+	return user;
+}
+
+async function register(user) {
+	user = verifyRegister(user);
+	if (user)
+	{
+		try {
+			await db.collection('users').insertOne(user);
+		}
+		catch(e) {
+			console.log(e);
+			return null;
 		}
 	}
-	catch(e){
-		console.log("Could not find Username");
-		console.log(e);
-	}
+	return user;
 }
 
 module.exports = {

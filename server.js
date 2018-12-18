@@ -1,7 +1,6 @@
 const express = require('express');
 const nunjucks = require('nunjucks');
 const bodyParser = require("body-parser");
-const crypto = require("crypto");
 const db = require("./db.js");
 const time = require("./time.js");
 const matchUtils = require("./match.js");
@@ -67,13 +66,15 @@ db.connect().then(() => {
 	.get('/login', async function (req, res) {
 		res.render('login.html');
 	})
-	.post('/post-feedback', async function (req, res) {
-		delete req.body._id; // for safety reasons
-		let username = await db.register(req.body);
-		if (username) {
-			res.redirect("/user/" + username);
-		}
-
+	.get('/register', function (req, res) {
+		res.render('register.html');
+	})
+	.post('/register', async function (req, res) {
+		let success = await db.register(req.body);
+		if (success)
+			res.redirect("/");
+		else
+			res.redirect("/register?fail=true");
 	})
 
 
