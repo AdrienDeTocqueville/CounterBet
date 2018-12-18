@@ -1,0 +1,28 @@
+#index-main {
+	width: 90%;
+	margin: 0 auto;
+}
+
+#index-main > div {
+	background-color: rgba(233,171,88,.5);
+	padding: 1em;
+	color: #d9480f;
+}
+
+#left {
+	width: 45%;
+	float: left;
+}
+
+#right {
+	width: 45%;
+	float: right;
+}
+
+.live {
+	color: rgb(255, 56, 0);
+	font-size: 12px;
+	padding: 2px;
+	font-weight: bold;
+	border: 2px solid rgb(255, 56, 0);
+}

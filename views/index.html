@@ -1,52 +1,67 @@
 {% extends "base.html" %}
 
 {% block link %}
-<link rel="stylesheet" type="text/css" href="/css/match.css">
+<link rel="stylesheet" type="text/css" href="/css/index.css">
+<link rel="stylesheet" type="text/css" href="/css/pannel.css">
 {% endblock %}
 
 {% block content %}
-<h1>Upcoming matches</h1>
-<br>
+<main id="index-main">
+	<div id="left">
+		<div id="users">
+				<div class="pannel">
+					<header>Users</header>
+					<main></main>
+				</div>
+		</div>
+		<div id="teams">
+				<div class="pannel">
+					<header>Teams</header>
+					<main></main>
+				</div>
+		</div>
+	</div>
+	<div id="right">
+		<h1>Upcoming matches</h1>
+		<br>
 
-{% for match in matches %}
-<div class="match">
-	<header>
-		<span>{{ "Live" if match.live else "Soon" }}</span>
-
-
-		<span>@
-			{% filter replace("Invalid Date", "En cours") %}
-				{{date( match.date) }}
-			{% endfilter %}
-		</span>
-
-		<span>Match #{{match.id}}</span>
-
-	</header>
-
-	<div class="match-List">
+		{% for match in matches %}
 		<a href="match/{{match.id}}">
-			<div class="match-header">
+			<div class="pannel">
+				<header>
+					{% if match.live %}
+					<p class="live">LIVE</p>
+					{% else %}
+					<span>Soon</span>
+					{% endif %}
+					
 
-			</div>
-			<div class="match-container">
-				<div class="match-teams">
-					<div class="match-teams-logo">
-						<img src="https://static.hltv.org/images/team/logo/{{match.team1.id}}" alt="HAVU">
-						{{match.team1.name}}
-					</div>
-					<div class="match-type">
-							VS
+					<span>@
+						{% filter replace("Invalid Date", "En cours") %}
+						{{date( match.date) }}
+						{% endfilter %}
+					</span>
+
+					<span>Match #{{match.id}}</span>
+
+				</header>
+
+				<main>
+					<div class="matchup">
+						<div class="team">
+							<img src="https://static.hltv.org/images/team/logo/{{match.team1.id}}" alt="HAVU">
+							{{match.team1.name}}
 						</div>
-						<div class="match-teams-logo">
+						<p>VS</p>
+						<div class="team">
 							<img src="https://static.hltv.org/images/team/logo/{{match.team2.id}}" alt="HAVU">
 							{{match.team2.name}}
+						</div>
 					</div>
-					<div style="clear:both;"></div>
-				</div>
+				</main>
 			</div>
 		</a>
+		{% endfor %}
 	</div>
-</div>
-{% endfor %}
+</main>
 {% endblock %}

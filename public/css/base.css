@@ -14,41 +14,6 @@ a:link, a:visited
 	text-decoration: none;
 }
 
-.match-container
-{
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	overflow: hidden;
-	/* height: 40px; */
-	background-color: #f1f1f1;
-	border-bottom: 1px solid #ddd;
-}
-.match-teams
-{
-	position: relative;
-	border: 2px transparent;
-	width: calc(100% - 8em);
-	height: auto;
-	text-align: center;
-}
-.match-teams-logo
-{
-	position: relative;
-	box-sizing: border-box;
-	margin: 0 3px;
-    width: 40%;
-	height: auto;
-	float: left;
-}
-.match-type
-{
-	position: relative;
-	box-sizing: border-box;
-	float: left;
-	width: 15%;
-}
-
 body > header
 {
 	height: 6em;
@@ -87,11 +52,11 @@ header > #link
 	width: 55%;
 }
 
-header > #left
+#nav-left
 {
 }
 
-header > #right
+#nav-right
 {
 }
 
@@ -99,7 +64,7 @@ img {
 	width: 45px;
 }
 
-header  #right > input
+#nav-right > input
 {
 	background: none;
 	border: 0;

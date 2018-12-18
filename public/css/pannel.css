@@ -1,0 +1,70 @@
+.pannel
+{
+	display: block;
+	margin-bottom: 20px;
+	
+	font-size: 17px;
+
+	max-width: 500px;
+	min-width: 400px;
+	
+	box-shadow: 2px 2px 12px 0 rgba(0,0,0,0.37);
+}
+
+.pannel > header
+{
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	background-color: #f1f1f1;
+	position: relative;
+
+	width: 100%;
+	height: 40px;
+
+	border-bottom: 1px solid #ddd;
+}
+
+.pannel > header > span
+{
+	text-align: center;
+	color: #000;
+	font-family: Roboto, sans-serif;
+	font-size: 14px;
+	font-weight: 700;
+}
+
+.pannel > main
+{
+	padding-top: 15px;
+	background-color: #fefefe;
+}
+
+.pannel div > img
+{
+	width: 64px;
+}
+
+.matchup
+{
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	overflow: hidden;
+}
+
+.team
+{
+	display: flex;
+	flex-direction: column;
+	font-size: 16px;
+	line-height: 35px;
+	padding-right: 25px;
+	text-align: center;
+}
+
+.team> img
+{
+	display: block;
+	margin: 0 auto;
+}
