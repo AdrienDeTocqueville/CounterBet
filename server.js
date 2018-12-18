@@ -69,12 +69,22 @@ db.connect().then(() => {
 	.get('/register', function (req, res) {
 		res.render('register.html');
 	})
+	.get('/login', function (req, res) {
+		res.render('login.html');
+	})
 	.post('/register', async function (req, res) {
 		let success = await db.register(req.body);
 		if (success)
 			res.redirect("/");
 		else
 			res.redirect("/register?fail=true");
+	})
+	.post('/login', async function(req,res){
+		let success = await db.login(req.body);
+		if (success)
+			res.redirect("/");
+		else
+			res.redirect("/login?fail=true");
 	})
 
 
