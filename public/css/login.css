@@ -1,98 +1,75 @@
 html, body {
 	font-family: 'Open Sans', sans-serif;
+	background: #f9f9f9;
 
 	width: 100%;
 	height: 100%;
 
-	background: #fefefe;
 	margin: auto;
 }
 
-.container{
+header {
 	width: 100%;
-	height: 100%;
-	display: flex;
+	padding-top: 32px;
 }
 
-#login-card{
-	width: 400px;
-	height: 550px;
-	background: #FEFEFE;
-	margin: auto;
-	border-radius: 4px;
-	border: 2px solid #A3A3A3;
-}
-
-#login-card  img {
+header > a {
+	text-align: center;
+	margin: 0 auto;
 	display: block;
 	margin: auto;
-	margin-top: 20%;
-	margin-bottom: 20%;
 }
 
-.login-form{
+.login-page {
+	width: 360px;
+	padding: 64px 0 0;
 	margin: auto;
+}
+.form {
+	position: relative;
+	z-index: 1;
+	background: #FFFFFF;
+	max-width: 360px;
+	margin: 0 auto 100px;
+	padding: 45px;
 	text-align: center;
-	margin-top: 8%;
+	border: 1px solid #d8dee2;
+	border-radius: 5px;
+}
+.form input {
+	outline: 0;
+	background: #f2f2f2;
+	width: 100%;
+	border: 0;
+	margin: 0 0 15px;
+	padding: 15px;
+	box-sizing: border-box;
+	font-size: 14px;
+}
+.form button {
+	text-transform: uppercase;
+	outline: 0;
+	background: rgb(29, 114, 179);
+	width: 100%;
+	border: 0;
+	padding: 15px;
+	color: #FFFFFF;
+	font-size: 14px;
+	cursor: pointer;
+}
+.form button:hover,.form button:active,.form button:focus {
+	background: rgb(225, 150, 13);
 }
 
-.login-form h6 {
-	font-family: 'Montserrat', sans-serif;
-	color: #383C53;
-	font-size: 1.2em;
-	margin: 0;
-	margin-bottom: 2%;
+.form .message {
+	margin: 15px 0 0;
+	color: #b3b3b3;
+	font-size: 12px;
 }
-
-.login-form input{
-	height: 40px;
-	width: 70%;
-	border: none;
-	font-family: 'Montserrat', sans-serif;
-	padding-left: 20px;
-	font-size: 0.9em;
-	border-radius: 3px;
-	box-shadow: 2px 1px 6px rgba(0,0,0,0.28);
+.form .message a {
+	color: rgb(250, 175, 23);
+	text-decoration: none;
 }
-
-.login-button-container {
-	margin: auto;
-	margin-top: 8%;
-	width: 70%;
-	display: flex;
-}
-
-.btn {
-	flex: 1;
-	width: 50%;
-	margin: 0 5%; 
-
-	background: none;
-	border: none;
-	border-radius: 11px;
-	font-family: 'Open Sans', sans-serif;
-	font-size: 1em;
-	padding: 5px; 
-
-	
-}
-
-#btn-register {
-	border: 2px solid #A3A3A3;
-	color: #A3A3A3;
-	
-}
-
-#btn-login{
-	background: #383C53;
-	color: #FEFEFE;
-}
-
-#forgot{
-	margin-top: 4%;
-	display: block;
-	text-align: center;
-	color: #383C53;
-	font-family: 'Open Sans', sans-serif;
-	font-size: 0.5em;
+.form .register-form {
+	display: none;
 }

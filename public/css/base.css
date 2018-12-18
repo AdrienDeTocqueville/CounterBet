@@ -95,6 +95,10 @@ header > #right
 {
 }
 
+img {
+	width: 45px;
+}
+
 header  #right > input
 {
 	background: none;

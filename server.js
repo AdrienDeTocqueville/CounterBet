@@ -77,7 +77,7 @@ db.connect().then(() => {
 	})
 
 
-	app.get('/*', () => {res.render('404.html');});
+	app.get('/*', (req, res) => {res.render('404.html');});
 
 	app.listen(8080);
 	console.log("\x1b[33mListening on port 8080 !\x1b[0m");

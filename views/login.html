@@ -1,33 +1,30 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Login - CounterBet</title>
-		<meta charset="utf-8" />
-		<link rel="stylesheet" type="text/css" href="/css/login.css">
-		<script type="text/javascript" src="/js/login.js"></script>
-	</head>
 
-	<body>
-		<div class="container">
-			<div id="login-card">
-				<a>
-					<img width="50px" src="/img/logo.png" alt="">
-				</a>
-				<form method="post" name="inscription">
-					<div class="login-form">
-						<h6>Email</h6>
-						<input name="mail" type="email" placeholder="Enter email address">
-					</div>
-					<div class="login-form">
-						<h6>Password</h6>
-						<input name="password" type="password" placeholder="Enter password">
-					</div>
-					<div class="login-button-container">
-						<input type="submit" value="Submit" />
-					</div>
-				</form>
-			</div>
+<head>
+	<title>Login - CounterBet</title>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" type="text/css" href="/css/login.css">
+	<script type="text/javascript" src="/js/login.js"></script>
+</head>
 
+<body>
+	<header>
+		<a href="/">
+			<img width="48px" src="/img/logo.png" alt="">
+		</a>
+	</header>
+	<div class="login-page">
+		<div class="form">
+			<form class="login-form">
+				<input type="text" placeholder="Username" />
+				<input type="password" placeholder="Password" />
+				<button>Sign in</button>
+				<p class="message">Not registered? <a href="#">Create an account</a></p>
+				<p class="message"><a href="#">Forgot my password</a></p>
+			</form>
 		</div>
-	</body>
+	</div>
+</body>
+
 </html>
