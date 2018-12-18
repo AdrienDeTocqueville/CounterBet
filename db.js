@@ -7,17 +7,16 @@ async function updateMatches(ids) {
 	let updates = [];
 	let collec = db.collection("matches");
 
-	for (id of ids)
-	{
+	for (id of ids) {
 		let newVal = await downloadMatch(id, false);
-		updates.push(collec.updateOne({ id }, {$set: newVal}, { upsert: true }));
+		updates.push(collec.updateOne({ id }, { $set: newVal }, { upsert: true }));
 	}
 	return Promise.all(updates);
 }
 
 async function downloadTournament(id, insert) {
 	console.log("Downloading tournament");
-	let tournament = await HLTV.getEvent({id}).then(event => ({
+	let tournament = await HLTV.getEvent({ id }).then(event => ({
 		id: id,
 		name: event.name,
 		startDate: event.dateStart,
@@ -26,7 +25,7 @@ async function downloadTournament(id, insert) {
 		teams: event.teams,
 		location: event.location
 	}));
-	
+
 	if (insert || insert === undefined)
 		db.collection("tournaments").insertOne(tournament);
 	return tournament;
@@ -34,7 +33,7 @@ async function downloadTournament(id, insert) {
 
 async function downloadMatch(id, insert) {
 	console.log("Downloading match");
-	let match = await HLTV.getMatch({id}).then(match => ({
+	let match = await HLTV.getMatch({ id }).then(match => ({
 		id: id,
 		title: match.title,
 		team1: match.team1,
@@ -47,7 +46,7 @@ async function downloadMatch(id, insert) {
 		streams: match.streams,
 		format: match.format
 	}));
-	
+
 	if (insert || insert === undefined)
 		db.collection("matches").insertOne(match);
 	return match;
@@ -55,13 +54,13 @@ async function downloadMatch(id, insert) {
 
 async function downloadTeam(id, insert) {
 	console.log("Downloading team");
-	let team = await HLTV.getTeam({id}).then(team => ({
+	let team = await HLTV.getTeam({ id }).then(team => ({
 		id: id,
 		name: team.name,
 		rank: team.rank,
 		players: team.players
 	}));
-	
+
 	if (insert || insert === undefined)
 		db.collection("teams").insertOne(team);
 	return team;
@@ -69,29 +68,29 @@ async function downloadTeam(id, insert) {
 
 function getUpcomingMatches(max) {
 	return db.collection("matches")
-		.find({$or: [{date: {$gt: Date.now()}}, {live: true}]})
-		.sort({date: 1})
+		.find({ $or: [{ date: { $gt: Date.now() } }, { live: true }] })
+		.sort({ date: 1 })
 		.limit(max || 10)
 		.toArray();
 }
 
 async function getTournament(id) {
-	let tournament = await db.collection("tournaments").findOne({id: parseInt(id)});
+	let tournament = await db.collection("tournaments").findOne({ id: parseInt(id) });
 	return tournament || downloadTournament(id);
 }
 
 async function getMatch(id) {
-	let match = await db.collection("matches").findOne({id: parseInt(id)});
+	let match = await db.collection("matches").findOne({ id: parseInt(id) });
 	return match || downloadMatch(id);
 }
 
 async function getTeam(id) {
-	let team = await db.collection("teams").findOne({id: parseInt(id)});
+	let team = await db.collection("teams").findOne({ id: parseInt(id) });
 	return team || downloadTeam(id);
 }
 
 function getUser(username) {
-	return db.collection("users").findOne({username});
+	return db.collection("users").findOne({ username });
 }
 
 
@@ -121,15 +120,15 @@ async function connect(url, refreshTime) {
 function updateDB() {
 	console.log("\x1b[33mUpdating database\x1b[0m");
 
-	let live = db.collection("matches").find({live: true}).toArray();
+	let live = db.collection("matches").find({ live: true }).toArray();
 	let upcoming = HLTV.getMatches().then(matches => {
 		let liveM = matches.filter(m => m.live);
 		let others = matches.filter(m => !m.live);
 		others = others.sort((a, b) => {
-			return (a-b);
+			return (a - b);
 		});
 		others = others.sort((a, b) => {
-			return (a-b);
+			return (a - b);
 		});
 		return liveM.concat(others.slice(0, 10 - liveM.length));
 	});
@@ -146,25 +145,40 @@ function updateDB() {
 async function register(a) {
 	try {
 		let re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-		console.log(a);
 		let algorithm = 'aes256';
 		let password = 'l5JmP+G0/1zB%;r8B8?2?2pcqGcL^3';
-		let cipher = crypto.createCipher(algorithm,password);
-		let crypted = cipher.update(a.mdp,'utf8','hex');
+		let cipher = crypto.createCipher(algorithm, password);
+		let crypted = cipher.update(a.mdp, 'utf8', 'hex');
 		crypted += cipher.final('hex');
-		a.mdp =crypted;
-		a.confirm =crypted;
-		console.log(a);
+		a.mdp = crypted;
+		a.confirm = crypted;
 		let res = await db.collection('users').insertOne(a);
-		if(res.result.ok == 1){
-		return a.username;
+		if (res.result.ok == 1) {
+			return a.username;
 		}
 	}
-	catch(e){
+	catch (e) {
 		console.log("Could not find Username");
 		console.log(e);
 	}
 }
+async function login(a) {
+	let connexion = [false, '']
+	let res = await db.collection("users").findOne({ username: a.username });
+	if (res != null) {
+		let algorithm = 'aes256';
+		let password = 'l5JmP+G0/1zB%;r8B8?2?2pcqGcL^3';
+		let decipher = crypto.createDecipher(algorithm, password);
+		let dec = decipher.update(res.mdp, 'hex', 'utf8');
+		dec += decipher.final('utf8');
+		if (dec == a.mdp) {
+			connexion[0] = true;
+			connexion[1] = a.username;
+		}
+	}
+	return connexion;
+}
+
 
 module.exports = {
 	getUpcomingMatches,
@@ -174,6 +188,7 @@ module.exports = {
 	getUser,
 
 	register,
+	login,
 
 	connect
 };

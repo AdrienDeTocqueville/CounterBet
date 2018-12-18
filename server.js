@@ -55,6 +55,9 @@ db.connect().then(() => {
 	.get('/register', function (req, res) {
 		res.render('register.html');
 	})
+	.get('/login', function (req, res) {
+		res.render('login.html');
+	})
 	.post('/register', async function (req, res) {
 		delete req.body._id; // for safety reasons
 		let username = await db.register(req.body);
@@ -62,6 +65,14 @@ db.connect().then(() => {
 			res.redirect("/user/" + username);
 		}
 
+	})
+	.post('/login', async function(req,res){
+		let connexion = await db.login(req.body);
+		if (connexion[0] == true){
+			res.redirect("/user/" + connexion[1]);
+		} else{
+			res.redirect("/login?fail=true");
+		}
 	})
 
 	app.listen(8080);
