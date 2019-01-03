@@ -13,6 +13,9 @@
 			</a>
 		</header>
 		<div class="login-page">
+			<div class="error">
+				Username or password is incorrect
+			</div>
 			<div class="form">
 				<form class="login-form" method="post", action="/login" name="login">
 					<input type="text" name="username" placeholder="Username" required/>
@@ -26,7 +29,7 @@
 	<script type="text/javascript">
 		var fail = window.location.search;
 		if (fail == '?fail=true') {
-			alert("Username or password is incorrect");
+			document.querySelector(".error").style.display = "block";
 		}
 	</script>
 </html>

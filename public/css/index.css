@@ -1,22 +1,14 @@
 #index-main {
-	width: 90%;
-	margin: 0 auto;
+	display: flex;
+	justify-content: space-evenly;
 }
 
 #index-main > div {
-	background-color: rgba(233,171,88,.5);
 	padding: 1em;
-	color: #d9480f;
 }
 
-#left {
-	width: 45%;
-	float: left;
-}
-
-#right {
-	width: 45%;
-	float: right;
+#left, #right {
+	width: 500px;
 }
 
 .live {

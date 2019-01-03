@@ -25,12 +25,27 @@ header > a {
 	padding: 64px 0 0;
 	margin: auto;
 }
+
+.error {
+	position: relative;
+	z-index: 1;
+	background: rgb(242, 222, 222);
+	max-width: 360px;
+	margin: 0 auto 30px;
+	padding: 15px;
+	text-align: center;
+	border: 1px solid #EBCCD1;
+	border-radius: 5px;
+	color: #A94442;
+	display: none;
+}
+
 .form {
 	position: relative;
 	z-index: 1;
 	background: #FFFFFF;
 	max-width: 360px;
-	margin: 0 auto 100px;
+	margin: 0 auto 0;
 	padding: 45px;
 	text-align: center;
 	border: 1px solid #d8dee2;
@@ -49,7 +64,7 @@ header > a {
 .form button {
 	text-transform: uppercase;
 	outline: 0;
-	background: rgb(29, 114, 179);
+	background: rgb(50, 60, 141);
 	width: 100%;
 	border: 0;
 	padding: 15px;
@@ -58,7 +73,7 @@ header > a {
 	cursor: pointer;
 }
 .form button:hover,.form button:active,.form button:focus {
-	background: rgb(225, 150, 13);
+	background: rgb(249, 157, 28);
 }
 
 .form .message {
