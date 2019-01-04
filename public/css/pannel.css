@@ -15,7 +15,7 @@
 {
 	display: flex;
 	align-items: center;
-	justify-content: space-around;
+	justify-content: space-between;
 	background-color: #f1f1f1;
 	position: relative;
 
@@ -25,13 +25,16 @@
 	border-bottom: 1px solid #ddd;
 }
 
-.pannel > header > span
+.pannel > header > p
 {
+	margin: 0 10px 0 10px;
+/*
 	text-align: center;
 	color: #000;
 	font-family: Roboto, sans-serif;
 	font-size: 14px;
 	font-weight: 700;
+*/
 }
 
 .pannel > main

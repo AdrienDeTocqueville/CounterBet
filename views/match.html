@@ -1,28 +1,55 @@
 {% extends "base.html" %}
+{% import "pannels.html" as pannels %}
 
 {% block link %}
 <link rel="stylesheet" type="text/css" href="/css/match.css">
+<link rel="stylesheet" type="text/css" href="/css/index.css">
+<link rel="stylesheet" type="text/css" href="/css/pannel.css">
 {% endblock %}
 
 {% block content %}
-<h1>{{match.title}}</h1>
-<p>{{match.team1.name}} VS {{match.team2.name}}</p>
-<p>{{date(match.date)}}</p>
-<a href="/tournament/{{match.tournament.id}}">Tournament: {{match.tournament.name}}</a>
 <br>
+<main id="index-main">
+	<div id="left">
+		{{ pannels.match(match, date) }}
 
+		<div class="pannel">
+		<main>
+			<a>Pick the winning team:</a>
+			<div>
+				<input type="radio" name="winner" value="team1">
+				<label for="team1">{{match.team1.name}}</label>
+		
+				<input type="radio" name="winner" value="team2">
+				<label for="team2">{{match.team2.name}}</label>
+			</div>
+			<button onclick="bet()">Bet !</button>
+		</main>
+		</div>
 
-{% if match.streamURL %}
-	<iframe
-		src="{{match.streamURL}}"
-		height="340px"
-		width="570px"
-		frameborder="0"
-		scrolling="no"
-		allowfullscreen="true">
-	</iframe>
-{% endif %}
+		<a href="/tournament/{{match.tournament.id}}">Tournament: {{match.tournament.name}}</a>
+	</div>
+	<div id="right">
+		{% if match.streamURL %}
+			<iframe
+				src="{{match.streamURL}}"
+				height="340px"
+				width="570px"
+				frameborder="0"
+				scrolling="no"
+				allowfullscreen="true">
+			</iframe>
+		{% endif %}
 
-<p style="white-space:pre-wrap;"> {{ match | dump('\t') }} </p>
+		<div class="pannel">
+			<header>
+				<p>Players</p>
+			</header>
+			<main></main>
+		</div>
+
+		<p style="white-space:pre-wrap;"> {{ match | dump('\t') }} </p>
+	</div>
+</main>
 
 {% endblock %}
