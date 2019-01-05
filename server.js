@@ -86,6 +86,10 @@ db.connect().then(() => {
 		else
 			res.redirect("/login?fail=true");
 	})
+	.post('/bet', async function(req,res){
+		console.log(req.body);
+		res.end(JSON.stringify({answer: "nope"}));
+	})
 
 
 	app.get('/*', (req, res) => {res.render('404.html');});

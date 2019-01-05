@@ -20,16 +20,21 @@
 	border-bottom: 1px solid #ddd;
 }
 
+.pannel > header.title
+{
+	display: block;
+	text-align: center;
+	color: gray;
+	text-transform: uppercase;
+	line-height: 40px;
+	height: 40px;
+	font-weight: 700;
+	font-size: 15px;
+}
+
 .pannel > header > p
 {
 	margin: 0 10px 0 10px;
-/*
-	text-align: center;
-	color: #000;
-	font-family: Roboto, sans-serif;
-	font-size: 14px;
-	font-weight: 700;
-*/
 }
 
 .pannel > main

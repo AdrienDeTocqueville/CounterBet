@@ -1,8 +1,3 @@
-#lineups {
-	display: flex;
-	justify-content: space-evenly;
-}
-
 #bet {
 	display: none;
 }
@@ -17,4 +12,31 @@
 
 #bet-team > button {
 	margin: 0 10px 10px 10px;
+}
+
+#lineups {
+	display: flex;
+}
+
+#lineups > div:first-child {
+	border-right: 1px solid #ddd;
+}
+
+#lineups > div {
+	width: 100%;
+}
+
+.player:first-child {
+	border-top: 0;
+}
+
+.player {
+	min-height: 40px;
+	border-top: 1px solid #ddd;
+	font-weight: 700;
+	font-size: 12px;
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	justify-content: center;
 }

@@ -20,14 +20,18 @@
 		<br>
 
 		<div class="pannel" id="bet">
-			<header>
-				<p>Pick a winner</p>
-			</header>
+			<header class="title"> Pick a winner </header>
 			<main>
 				<div id="bet-team">
-					<button onclick="bet_for(1)">{{match.team1.name}}</button>
-					<div class="empty"></div>
-					<button onclick="bet_for(2)">{{match.team2.name}}</button>
+					{% macro bet_team(i, name) %}
+					<button onclick="bet_for({{i}}, '{{name}}')">{{name}}</button>
+					{% endmacro %}
+					{{bet_team(0, match.team1.name)}}
+					{{bet_team(1, match.team2.name)}}
+
+				</div>
+				<div id="bet-amount">
+					<a>How much do you bet ?</a>
 				</div>
 				<div id="bet-error">
 					<a>You must select a team !</a>
@@ -40,9 +44,7 @@
 		<br>
 
 		<div class="pannel">
-			<header>
-				<p>History</p>
-			</header>
+			<header class="title"> History </header>
 			<main>
 			</main>
 		</div>
@@ -70,27 +72,19 @@
 		{% endif %}
 
 		<div class="pannel">
-			<header>
-				<p>Line-ups</p>
-			</header>
-			<main id="lineups">
+			<header class="title"> Line-ups </header>
+			<div id="lineups">
+				{% macro lineup(team) %}
 				<div>
-					<p>{{ match.team1.name }}</p>
-					<ul>
-					{% for player in match.team1.players %}
-						<li> {{player.name}} </li>
+					{% for player in team.players %}
+					<div class="player"> {{player.name}} </div>
 					{% endfor %}
-					</ul>
 				</div>
-				<div>
-					<p>{{ match.team2.name }}</p>
-					<ul>
-					{% for player in match.team2.players %}
-						<li> {{player.name}} </li>
-					{% endfor %}
-					</ul>
-				</div>
-			</main>
+				{% endmacro %}
+
+				{{ lineup(match.team1) }}
+				{{ lineup(match.team2) }}
+			</div>
 		</div>
 	</div>
 </main>
