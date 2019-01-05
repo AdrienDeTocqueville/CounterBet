@@ -19,8 +19,10 @@
   "homepage": "https://github.com/AdriendeTocqueville/counterbet#readme",
   "dependencies": {
     "express": "^4.16.4",
+    "express-session": "^1.15.6",
     "hltv": "^2.9.1",
     "mongodb": "^3.1.10",
-    "nunjucks": "^3.1.4"
+    "nunjucks": "^3.1.4",
+    "uuid": "^3.3.2"
   }
 }

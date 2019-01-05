@@ -2,6 +2,7 @@ const mongo = require("mongodb").MongoClient;
 const { HLTV } = require("hltv");
 const crypto = require("crypto");
 let db = null;
+var uuid = require('uuid');
 
 async function updateMatches(ids) {
 	let updates = [];
@@ -77,21 +78,21 @@ function getUpcomingMatches(max) {
 async function getTournament(id) {
 	if (isNaN(id = parseInt(id)))
 		return null;
-	let tournament = await db.collection("tournaments").findOne({id});
+	let tournament = await db.collection("tournaments").findOne({ id });
 	return tournament || downloadTournament(id);
 }
 
 async function getMatch(id) {
 	if (isNaN(id = parseInt(id)))
 		return null;
-	let match = await db.collection("matches").findOne({id});
+	let match = await db.collection("matches").findOne({ id });
 	return match || downloadMatch(id);
 }
 
 async function getTeam(id) {
 	if (isNaN(id = parseInt(id)))
 		return null;
-	let team = await db.collection("teams").findOne({id});
+	let team = await db.collection("teams").findOne({ id });
 	return team || downloadTeam(id);
 }
 
@@ -178,14 +179,12 @@ function verifyRegister(user) {
 }
 
 async function register(user) {
-	console.log("register", user)
 	user = verifyRegister(user);
-	if (user)
-	{
+	if (user) {
 		try {
 			await db.collection('users').insertOne(user);
 		}
-		catch(e) {
+		catch (e) {
 			console.log(e);
 			return null;
 		}
@@ -193,14 +192,20 @@ async function register(user) {
 	return user;
 }
 
-async function login(user) {
+async function login(user,randid) {
 	let res = await db.collection("users").findOne({ username: user.username });
 	if (res != null) {
-		if (user.password == unhashPassword(res.password))
+		if (user.password == unhashPassword(res.password)) {
+			db.collection('users').update(
+				{ username: user.username },
+				{ $set: { randid: randid } }
+			);
 			return user.username;
+		}
 	}
 	return null;
 }
+
 
 
 module.exports = {
