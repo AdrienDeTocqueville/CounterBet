@@ -7,49 +7,91 @@
 <link rel="stylesheet" type="text/css" href="/css/pannel.css">
 {% endblock %}
 
+{% block script %}
+<script type="text/javascript" src="/js/match.js"></script>
+{% endblock %}
+
 {% block content %}
 <br>
 <main id="index-main">
 	<div id="left">
 		{{ pannels.match(match, date) }}
 
+		<br>
+
+		<div class="pannel" id="bet">
+			<header>
+				<p>Pick a winner</p>
+			</header>
+			<main>
+				<div id="bet-team">
+					<button onclick="bet_for(1)">{{match.team1.name}}</button>
+					<div class="empty"></div>
+					<button onclick="bet_for(2)">{{match.team2.name}}</button>
+				</div>
+				<div id="bet-error">
+					<a>You must select a team !</a>
+				</div>
+			</main>
+		</div>
+		<button onclick="bet()">Make a bet !</button>
+
+		<br>
+		<br>
+
 		<div class="pannel">
-		<main>
-			<a>Pick the winning team:</a>
-			<div>
-				<input type="radio" name="winner" value="team1">
-				<label for="team1">{{match.team1.name}}</label>
-		
-				<input type="radio" name="winner" value="team2">
-				<label for="team2">{{match.team2.name}}</label>
-			</div>
-			<button onclick="bet()">Bet !</button>
-		</main>
+			<header>
+				<p>History</p>
+			</header>
+			<main>
+			</main>
 		</div>
 
+
+
 		<a href="/tournament/{{match.tournament.id}}">Tournament: {{match.tournament.name}}</a>
+		<p style="white-space:pre-wrap;"> {{ match | dump('\t') }} </p>
 	</div>
+
+
+
 	<div id="right">
 		{% if match.streamURL %}
 			<iframe
 				src="{{match.streamURL}}"
 				height="340px"
-				width="570px"
+				width="100%"
 				frameborder="0"
 				scrolling="no"
 				allowfullscreen="true">
 			</iframe>
+			<br>
+			<br>
 		{% endif %}
 
 		<div class="pannel">
 			<header>
-				<p>Players</p>
+				<p>Line-ups</p>
 			</header>
-			<main></main>
+			<main id="lineups">
+				<div>
+					<p>{{ match.team1.name }}</p>
+					<ul>
+					{% for player in match.team1.players %}
+						<li> {{player.name}} </li>
+					{% endfor %}
+					</ul>
+				</div>
+				<div>
+					<p>{{ match.team2.name }}</p>
+					<ul>
+					{% for player in match.team2.players %}
+						<li> {{player.name}} </li>
+					{% endfor %}
+					</ul>
+				</div>
+			</main>
 		</div>
-
-		<p style="white-space:pre-wrap;"> {{ match | dump('\t') }} </p>
 	</div>
 </main>
-
 {% endblock %}

@@ -38,7 +38,7 @@ db.connect().then(() => {
 		try_goto(team, res, 'team.html', {team});
 	})
 	.get('/match/:match', async function (req, res) {
-		let match = matchUtils.process(await db.getMatch(req.params.match));
+		let match = await matchUtils.process(await db.getMatch(req.params.match));
 		try_goto(match, res, 'match.html', { match, date: time.toString });
 	})
 	.get('/tournament/:tournament', async function (req, res) {

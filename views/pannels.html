@@ -1,29 +1,36 @@
+{% macro match_header(match, date) %}
+<header>
+	{% if match.live %}
+		<p class="live">LIVE</p>
+	{% else %}
+		<p>{{date(match.date)}}</p>
+	{% endif %}
+	
+	<p>{{match.tournament.name}}</p>
+</header>
+{% endmacro %}
+
+{% macro match_content(match, date) %}
+<main>
+	<div class="matchup">
+		<div class="team">
+			<img src="https://static.hltv.org/images/team/logo/{{match.team1.id}}">
+			{{match.team1.name}}
+		</div>
+		<p>VS</p>
+		<div class="team">
+			<img src="https://static.hltv.org/images/team/logo/{{match.team2.id}}">
+			{{match.team2.name}}
+		</div>
+	</div>
+</main>
+{% endmacro %}
+
 {% macro match(match, date) %}
 <a href="/match/{{match.id}}">
 	<div class="pannel">
-		<header>
-			{% if match.live %}
-				<p class="live">LIVE</p>
-			{% else %}
-				<p>{{date(match.date)}}</p>
-			{% endif %}
-			
-			<p>{{match.tournament.name}}</p>
-		</header>
-
-		<main>
-			<div class="matchup">
-				<div class="team">
-					<img src="https://static.hltv.org/images/team/logo/{{match.team1.id}}">
-					{{match.team1.name}}
-				</div>
-				<p>VS</p>
-				<div class="team">
-					<img src="https://static.hltv.org/images/team/logo/{{match.team2.id}}">
-					{{match.team2.name}}
-				</div>
-			</div>
-		</main>
+		{{ match_header(match, date) }}
+		{{ match_content(match, date) }}
 	</div>
 </a>
 {% endmacro %}

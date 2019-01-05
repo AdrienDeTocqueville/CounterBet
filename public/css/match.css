@@ -1,0 +1,20 @@
+#lineups {
+	display: flex;
+	justify-content: space-evenly;
+}
+
+#bet {
+	display: none;
+}
+
+#bet-team {
+	display: flex;
+}
+
+#bet-error {
+	display: none;
+}
+
+#bet-team > button {
+	margin: 0 10px 10px 10px;
+}
