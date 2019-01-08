@@ -31,9 +31,35 @@
 		<br>
 
 		{% for match in matches %}
-			{{ pannels.match(match, date) }}
-			<br>
+			<a href="/match/{{match.id}}">
+				<div class="pannel">
+					<header>
+						{% if match.live %}
+							<p class="live">LIVE</p>
+						{% else %}
+							<p>{{date(match.date)}}</p>
+						{% endif %}
+
+						<p>{{match.tournament.name}}</p>
+					</header>
+					<main>
+						<div class="matchup">
+							<div class="team">
+								<img src="https://static.hltv.org/images/team/logo/{{match.team1.id}}">
+									{{match.team1.name}}
+							</div>
+							<p>VS</p>
+							<div class="team">
+								<img src="https://static.hltv.org/images/team/logo/{{match.team2.id}}">
+								{{match.team2.name}}
+							</div>
+						</div>
+					</main>
+				</div>
+			</a>
 		{% endfor %}
 	</div>
+
+
 </main>
 {% endblock %}
