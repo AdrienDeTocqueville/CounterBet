@@ -32,10 +32,11 @@
 		<br>
 
 		{% for match in matches %}
-			<a href="/match/{{match.id}}">
-				<div class="pannel">
+		<div class="pannel">
+				<a href="/match/{{match.id}}">
 					{{ pannels.match_header(match, date) }}
 					<main>
+						<a href="/match/{{match.id}}">
 						<div class="matchup">
 							{{ pannels.match_content(match.team1) }}
 							<p>VS</p>

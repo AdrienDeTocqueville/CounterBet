@@ -15,8 +15,21 @@
 <br>
 <main id="index-main">
 	<div id="left">
-		{{ pannels.match(match, date) }}
-
+		<div class="pannel">
+			{{ pannels.match_header(match, date) }}
+			<main>
+				<div class="matchup">
+					<a href="/team/{{match.team1.id}}">
+						{{ pannels.match_content(match.team1) }}
+					</a>
+						<p>VS</p>
+					<a href="/team/{{match.team2.id}}">
+						{{ pannels.match_content(match.team2) }}
+					</a>
+				</div> 
+			</main>
+		</div>
+		
 		<br>
 
 		<div class="pannel" id="bet">
