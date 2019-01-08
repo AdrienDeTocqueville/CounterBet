@@ -17,7 +17,10 @@ app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.resolve(__dirname, 'public')));
 app.use(session({
-	secret: 'keyboard cat'
+	saveUninitialized: false,
+	cookie: {secure: false},
+	secret: 'keyboard cat',
+	resave: false
 }));
 
 
@@ -28,21 +31,21 @@ nunjucks.configure("views", {
 });
 
 
-function try_goto(condition, res, req, name, ctx) {
+function try_goto(condition, res, req, file, ctx) {
 	if (condition)
-		do_goto(res, req, name, ctx);
+		do_goto(res, req, file, ctx);
 	else
-		res.render('404.html');
+		do_goto(res, req, '404.html');
 }
 
-function do_goto(res, req, name, ctx) {
+function do_goto(res, req, file, ctx) {
 	ctx = ctx || {};
 
-	if (req.session.user)
-		ctx.user = {
-			username: req.session.user
+	if (req.session.username)
+		ctx._user = {
+			name: req.session.username
 		};
-	res.render(name, ctx);
+	res.render(file, ctx);
 }
 
 db.connect().then(() => {
@@ -86,10 +89,14 @@ db.connect().then(() => {
 	.get('/register', function (req, res) {
 		do_goto(res, req, 'register.html');
 	})
+	.get('/logout', function (req, res) {
+		req.session.username = null;
+		do_goto(res, req, '/');
+	})
 	.post('/login', async function (req, res) {
-		req.session.user = await db.login(req.body);
-		if (req.session.user)
-			res.redirect(`/user/${req.session.user}`);
+		req.session.username = await db.login(req.body);
+		if (req.session.username)
+			res.redirect(`/user/${req.session.username}`);
 		else
 			res.redirect("/login?fail=true");
 
