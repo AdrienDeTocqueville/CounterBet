@@ -1,19 +1,24 @@
 const express = require('express');
-const nunjucks = require('nunjucks');
+const session = require('express-session');
 const bodyParser = require("body-parser");
+
+const nunjucks = require('nunjucks');
 
 const db = require("./db.js");
 const bet = require("./bet.js");
 const time = require("./time.js");
 const matchUtils = require("./match.js");
 
-var app = express();
 
+var app = express();
 
 var path = require('path');
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.resolve(__dirname, 'public')));
+app.use(session({
+	secret: 'keyboard cat'
+}));
 
 
 nunjucks.configure("views", {
@@ -22,65 +27,78 @@ nunjucks.configure("views", {
 	express: app
 });
 
-function try_goto(condition, res, name, ctx)
-{
+
+function try_goto(condition, res, req, name, ctx) {
 	if (condition)
-		res.render(name, ctx);
+		do_goto(res, req, name, ctx);
 	else
 		res.render('404.html');
+}
+
+function do_goto(res, req, name, ctx) {
+	ctx = ctx || {};
+
+	if (req.session.user)
+		ctx.user = {
+			username: req.session.user
+		};
+	res.render(name, ctx);
 }
 
 db.connect().then(() => {
 	app.get('/', async function (req, res) {
 		let matches = await db.getUpcomingMatches();
-		try_goto(matches, res, 'index.html', { matches, date: time.toString });
+		try_goto(matches, res, req, 'index.html', { matches, date: time.toString});
 	})
 	.get('/team/:team', async function (req, res) {
 		let team = await db.getTeam(req.params.team);
-		try_goto(team, res, 'team.html', {team});
+		try_goto(team, res, req, 'team.html', { team });
 	})
 	.get('/match/:match', async function (req, res) {
-		let match = await matchUtils.process(await db.getMatch(req.params.match));
-		try_goto(match, res, 'match.html', { match, date: time.toString });
+		let match = matchUtils.process(await db.getMatch(req.params.match));
+		try_goto(match, res, req, 'match.html', { match, date: time.toString });
 	})
 	.get('/tournament/:tournament', async function (req, res) {
 		let tournament = await db.getTournament(req.params.tournament);
-		try_goto(tournament, res, 'tournament.html', {tournament, date: time.toString});
+		try_goto(tournament, res, req, 'tournament.html', { tournament, date: time.toString });
 	})
 	.get('/teams/:team', async function (req, res) {
 		let team = await db.getTeam(req.params.team);
-		try_goto(team, res, 'team.html', { team });
+		try_goto(team, res, req, 'team.html', { team });
 	})
 	.get('/match/:match', async function (req, res) {
 		let match = await db.getMatch(req.params.match);
-		try_goto(match, res, 'match.html', { match });
+		try_goto(match, res, req, 'match.html', { match });
 	})
 	.get('/user/:username', async function (req, res) {
 		let user = await db.getUser(req.params.username);
-		try_goto(user, res, 'user.html', { user });
+		try_goto(user, res, req, 'user.html', { user });
 	})
 	.get('/leaderboard', async function (req, res) {
-		res.render('leaderboard.html');
+		do_goto(res, req, 'leaderboard.html');
 	})
 	.get('/calendar', async function (req, res) {
-		res.render('leaderboard.html');
+		do_goto(res, req, 'calendar.html');
 	})
 	.get('/login', async function (req, res) {
-		res.render('login.html');
+		do_goto(res, req, 'login.html');
 	})
 	.get('/register', function (req, res) {
-		res.render('register.html');
+		do_goto(res, req, 'register.html');
 	})
-	.get('/login', function (req, res) {
-		res.render('login.html');
+	.post('/login', async function (req, res) {
+		req.session.user = await db.login(req.body);
+		if (req.session.user)
+			res.redirect(`/user/${req.session.user}`);
+		else
+			res.redirect("/login?fail=true");
+
 	})
 	.post('/register', async function (req, res) {
-		let success = await db.register(req.body);
-		res.redirect(success ? "/" : "/register?fail=true");
-	})
-	.post('/login', async function(req,res){
-		let success = await db.login(req.body);
-		res.redirect(success ? "/" : "/login?fail=true");
+		if (await db.register(req.body))
+			res.redirect("/");
+		else
+			res.redirect("/register?fail=true");
 	})
 	.post('/bet', async function(req,res){
 		let sucess = await bet.register_bet(req.body);
@@ -88,7 +106,7 @@ db.connect().then(() => {
 	})
 
 
-	app.get('/*', (req, res) => {res.render('404.html');});
+	app.get('/*', (req, res) => { res.render('404.html'); });
 
 	app.listen(8080);
 	console.log("\x1b[33mListening on port 8080 !\x1b[0m");

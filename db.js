@@ -207,7 +207,6 @@ function verifyRegister(user) {
 }
 
 async function register(user) {
-	console.log("register", user)
 	user = verifyRegister(user);
 	if (user)
 	{
