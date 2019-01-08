@@ -91,7 +91,7 @@ db.connect().then(() => {
 	})
 	.get('/logout', function (req, res) {
 		req.session.username = null;
-		do_goto(res, req, '/');
+		res.redirect('/');
 	})
 	.post('/login', async function (req, res) {
 		req.session.username = await db.login(req.body);
@@ -107,9 +107,9 @@ db.connect().then(() => {
 		else
 			res.redirect("/register?fail=true");
 	})
-	.post('/bet', async function(req,res){
-		let sucess = await bet.register_bet(req.body);
-		res.end(JSON.stringify({answer: "nope"}));
+	.post('/bet', async function(req,res) {
+		let response = await bet.register_bet(req.session.username, req.body);
+		res.end(JSON.stringify(response));
 	})
 
 

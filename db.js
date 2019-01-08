@@ -229,8 +229,10 @@ async function login(user) {
 	return null;
 }
 
-async function addbet(bet) {
-	await db.collection("users").updateOne({ username: "franck" }, { $push : { paris : bet } });
+async function addBet(username, bet) {
+	return db.collection("users").updateOne({ username }, {
+		$push : { bets : bet }
+	});
 }
 
 
@@ -244,8 +246,7 @@ module.exports = {
 
 	register,
 	login,
+	addBet,
 
-	connect,
-
-	addbet
+	connect
 };

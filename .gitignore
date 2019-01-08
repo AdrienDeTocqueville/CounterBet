@@ -1,6 +1,7 @@
 .idea/
 .vs/
 .*.swp
+.vimsession
 
 # Logs
 logs
