@@ -27,10 +27,8 @@
 {% endmacro %}
 
 {% macro match(match, date) %}
-<a href="/match/{{match.id}}">
 	<div class="pannel">
 		{{ match_header(match, date) }}
 		{{ match_content(match, date) }}
 	</div>
-</a>
 {% endmacro %}
