@@ -17,20 +17,21 @@ function bet_for(i, team)
 	selected = team;
 }
 
-function bet()
+function bet(id, date)
 {
 	if (display == 'none')
 		document.querySelector("#bet").style.display = display = 'block';
 	else if (!selected)
 		error.style.display = 'block';
 	else
-		send_bet(selected);
+		send_bet(selected,id,document.getElementById("num").value,date);
 }
 
-async function send_bet(team)
+async function send_bet(team,id,num,date)
 {
 	let endpoint = "/bet";
-	let body = `team=${team}`;
+	let body = `team=${team}&match=${id}&price=${num}&date=${date}`;
+	
 
 	try {
 		(async () => {
@@ -41,9 +42,11 @@ async function send_bet(team)
 				},
 				body
 			});
-			const content = await rawResponse.json();
+			const response = await rawResponse.json();
 
-			console.log(content);
+			console.log(response);
+			location.reload();
+			alert("Paris pris en compte");
 		 })();
 	}
 	catch (e) {

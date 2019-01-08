@@ -6,30 +6,16 @@
 		<p>{{date(match.date)}}</p>
 	{% endif %}
 	
-	<p>{{match.tournament.name}}</p>
+	<p>	<a href="/tournament/{{match.tournament.id}}">
+		{{match.tournament.name}}
+	</a></p>
+	
 </header>
 {% endmacro %}
 
-{% macro match_content(match, date) %}
-<main>
-	<div class="matchup">
-		<div class="team">
-			<img src="https://static.hltv.org/images/team/logo/{{match.team1.id}}">
-			{{match.team1.name}}
-		</div>
-		<p>VS</p>
-		<div class="team">
-			<img src="https://static.hltv.org/images/team/logo/{{match.team2.id}}">
-			{{match.team2.name}}
-		</div>
-	</div>
-</main>
-{% endmacro %}
-
-
-{% macro match(match, date) %}
-	<div class="pannel">
-		{{ match_header(match, date) }}
-		{{ match_content(match, date) }}
+{% macro match_content(team) %}
+	<div class="team">
+		<img src="https://static.hltv.org/images/team/logo/{{team.id}}">
+		{{team.name}}
 	</div>
 {% endmacro %}

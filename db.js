@@ -89,10 +89,10 @@ function getUpcomingMatches(max) {
 function getMatches(team1, team2, max) {
 	let query;
 	if (arguments.length == 2) {
-		query = { $or: [{team1: team1}, {team2: team1}] }
+		query = { $or: [{ team1: team1 }, { team2: team1 }] }
 		max = team2;
 	} else {
-		query = { $or: [{team1, team2}, {team1: team2, team2: team1}] }
+		query = { $or: [{ team1, team2 }, { team1: team2, team2: team1 }] }
 	}
 	return db.collection("matches")
 		.find(query)
@@ -105,21 +105,21 @@ function getMatches(team1, team2, max) {
 async function getTournament(id) {
 	if (isNaN(id = parseInt(id)))
 		return null;
-	let tournament = await db.collection("tournaments").findOne({id});
+	let tournament = await db.collection("tournaments").findOne({ id });
 	return tournament || downloadTournament(id);
 }
 
 async function getMatch(id) {
 	if (isNaN(id = parseInt(id)))
 		return null;
-	let match = await db.collection("matches").findOne({id});
+	let match = await db.collection("matches").findOne({ id });
 	return match || downloadMatch(id);
 }
 
 async function getTeam(id) {
 	if (isNaN(id = parseInt(id)))
 		return null;
-	let team = await db.collection("teams").findOne({id});
+	let team = await db.collection("teams").findOne({ id });
 	return team || downloadTeam(id);
 }
 
@@ -208,12 +208,11 @@ function verifyRegister(user) {
 
 async function register(user) {
 	user = verifyRegister(user);
-	if (user)
-	{
+	if (user) {
 		try {
 			await db.collection('users').insertOne(user);
 		}
-		catch(e) {
+		catch (e) {
 			console.log(e);
 			return null;
 		}
@@ -230,6 +229,10 @@ async function login(user) {
 	return null;
 }
 
+async function addbet(bet) {
+	await db.collection("users").updateOne({ username: "franck" }, { $push : { paris : bet } });
+}
+
 
 module.exports = {
 	getUpcomingMatches,
@@ -242,5 +245,7 @@ module.exports = {
 	register,
 	login,
 
-	connect
+	connect,
+
+	addbet
 };
