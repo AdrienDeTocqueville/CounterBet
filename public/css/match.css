@@ -1,3 +1,5 @@
+/* BET */
+
 #bet {
 	display: none;
 }
@@ -13,6 +15,26 @@
 #bet-team > button {
 	margin: 0 10px 10px 10px;
 }
+
+/* HISTORY */
+.prev_match {
+}
+
+.pannel > span {
+	width: 100%;
+	min-height: 60px;
+
+	padding: 0 10px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	text-align: center;
+	font-size: 17px;
+	color: gray;
+}
+
+/* LINEUP */
 
 #lineups {
 	display: flex;

@@ -1,7 +1,9 @@
 const express = require('express');
 const nunjucks = require('nunjucks');
 const bodyParser = require("body-parser");
+
 const db = require("./db.js");
+const bet = require("./bet.js");
 const time = require("./time.js");
 const matchUtils = require("./match.js");
 
@@ -74,20 +76,14 @@ db.connect().then(() => {
 	})
 	.post('/register', async function (req, res) {
 		let success = await db.register(req.body);
-		if (success)
-			res.redirect("/");
-		else
-			res.redirect("/register?fail=true");
+		res.redirect(success ? "/" : "/register?fail=true");
 	})
 	.post('/login', async function(req,res){
 		let success = await db.login(req.body);
-		if (success)
-			res.redirect("/");
-		else
-			res.redirect("/login?fail=true");
+		res.redirect(success ? "/" : "/login?fail=true");
 	})
 	.post('/bet', async function(req,res){
-		console.log(req.body);
+		let sucess = await bet.register_bet(req.body);
 		res.end(JSON.stringify({answer: "nope"}));
 	})
 

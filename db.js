@@ -15,60 +15,88 @@ async function updateMatches(ids) {
 }
 
 async function downloadTournament(id, insert) {
-	console.log("Downloading tournament");
-	let tournament = await HLTV.getEvent({ id }).then(event => ({
-		id: id,
-		name: event.name,
-		startDate: event.dateStart,
-		endDate: event.dateEnd,
-		prizePool: event.prizePool,
-		teams: event.teams,
-		location: event.location
-	}));
+	console.log("Downloading tournament #" + id);
+	try {
+		let tournament = await HLTV.getEvent({ id }).then(event => ({
+			id: id,
+			name: event.name,
+			startDate: event.dateStart,
+			endDate: event.dateEnd,
+			prizePool: event.prizePool,
+			teams: event.teams,
+			location: event.location
+		}));
 
-	if (insert || insert === undefined)
-		db.collection("tournaments").insertOne(tournament);
-	return tournament;
+		if (insert || insert === undefined)
+			db.collection("tournaments").insertOne(tournament);
+		return tournament;
+	} catch (e) {
+		return null;
+	}
 }
 
 async function downloadMatch(id, insert) {
-	console.log("Downloading match");
-	let match = await HLTV.getMatch({ id }).then(match => ({
-		id: id,
-		title: match.title,
-		team1: match.team1,
-		team2: match.team2,
-		winner: match.winnerTeam,
-		date: match.date,
-		live: match.live,
-		cote: 1,
-		tournament: match.event,
-		streams: match.streams,
-		format: match.format
-	}));
+	console.log("Downloading match #" + id);
+	try {
+		let match = await HLTV.getMatch({ id }).then(match => ({
+			id: id,
+			title: match.title,
+			team1: match.team1,
+			team2: match.team2,
+			winner: match.winnerTeam,
+			date: match.date,
+			live: match.live,
+			cote: 1,
+			tournament: match.event,
+			streams: match.streams,
+			format: match.format
+		}));
 
-	if (insert || insert === undefined)
-		db.collection("matches").insertOne(match);
-	return match;
+		if (insert || insert === undefined)
+			db.collection("matches").insertOne(match);
+		return match;
+	} catch (e) {
+		return null;
+	}
 }
 
 async function downloadTeam(id, insert) {
-	console.log("Downloading team");
-	let team = await HLTV.getTeam({ id }).then(team => ({
-		id: id,
-		name: team.name,
-		rank: team.rank,
-		players: team.players
-	}));
+	console.log("Downloading team #" + id);
+	try {
+		let team = await HLTV.getTeam({ id }).then(team => ({
+			id: id,
+			name: team.name,
+			rank: team.rank,
+			players: team.players
+		}));
 
-	if (insert || insert === undefined)
-		db.collection("teams").insertOne(team);
-	return team;
+		if (insert || insert === undefined)
+			db.collection("teams").insertOne(team);
+		return team;
+	} catch (e) {
+		return null;
+	}
 }
 
 function getUpcomingMatches(max) {
 	return db.collection("matches")
 		.find({ $or: [{ date: { $gt: Date.now() } }, { live: true }] })
+		.sort({ date: 1 })
+		.limit(max || 10)
+		.toArray();
+}
+
+function getMatches(team1, team2, max) {
+	let query;
+	if (arguments.length == 2) {
+		query = { $or: [{team1: team1}, {team2: team1}] }
+		max = team2;
+	} else {
+		query = { $or: [{team1, team2}, {team1: team2, team2: team1}] }
+	}
+	return db.collection("matches")
+		.find(query)
+		//.find({ $and: [query, { winner: {$ne: null} }] })
 		.sort({ date: 1 })
 		.limit(max || 10)
 		.toArray();
@@ -130,6 +158,7 @@ function updateDB() {
 	let upcoming = HLTV.getMatches().then(matches => {
 		let liveM = matches.filter(m => m.live);
 		let others = matches.filter(m => !m.live);
+		// Sort twice because otherwise it doesn't work
 		others = others.sort((a, b) => {
 			return (a - b);
 		});
@@ -206,6 +235,7 @@ async function login(user) {
 module.exports = {
 	getUpcomingMatches,
 	getTournament,
+	getMatches,
 	getMatch,
 	getTeam,
 	getUser,

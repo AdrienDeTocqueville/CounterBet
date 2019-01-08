@@ -32,33 +32,65 @@
 				</div>
 				<div id="bet-amount">
 					<a>How much do you bet ?</a>
+					<input tpe="number">
 				</div>
 				<div id="bet-error">
 					<a>You must select a team !</a>
 				</div>
 			</main>
 		</div>
-		<button onclick="bet()">Make a bet !</button>
 
+		{% if match.winner == null %}
+		<button onclick="bet()">Make a bet !</button>
 		<br>
 		<br>
+		{% endif %}
 
 		<div class="pannel">
 			<header class="title"> History </header>
-			<main>
-			</main>
+			{% if match.history and match.history.length %}
+				{% for prev_match in match.history %}
+					<div class="prev_match">
+					{{prev_match.date}}
+					{{prev_match.team1.name}}
+					{{prev_match.team2.name}}
+					{{prev_match.winner}}
+					</div>
+				{% endfor %}
+			{% else %}
+				<span>These teams did not play against each other recently.</span>
+			{% endif %}
 		</div>
 
+		{% macro prev_matches(team) %}
+		{% if team.history and team.history.length %}
+		<br>
+		<div class="pannel">
+			<header class="title"> Previous matches - {{team.name}} </header>
+			{% for prev_match in team.history %}
+				<div class="prev_match">
+					{{prev_match.date}}
+					{{prev_match.team1.name}}
+					{{prev_match.team2.name}}
+					{{prev_match.winner}}
+				</div>
+			{% endfor %}
+		</div>
+		{% endif %}
+		{% endmacro %}
+
+		{{ prev_matches(match.team1) }}
+		{{ prev_matches(match.team2) }}
 
 
 		<a href="/tournament/{{match.tournament.id}}">Tournament: {{match.tournament.name}}</a>
-		<p style="white-space:pre-wrap;"> {{ match | dump('\t') }} </p>
+		<p style="white-space:pre-wrap;"> {{ {title:match.title, winner: match.winner, cote: match.cote, format: match.format } | dump('\t') }} </p>
 	</div>
 
 
 
 	<div id="right">
-		{% if match.streamURL %}
+		{% if match.streamURL and match.live %}
 			<iframe
 				src="{{match.streamURL}}"
 				height="340px"
