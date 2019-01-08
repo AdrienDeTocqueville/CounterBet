@@ -25,10 +25,13 @@
 				<div id="nav-right">
 					<input type="text" placeholder="Seach CounterBet">
 					{% if user %}
-					<a class="header-link">Bonjour {{user.username}}</a>
+					<a class="header-link">{{user.username}}</a>
+					<a class="header-link" href="/logout">Log&nbsp;out</a>
+
 					{% else %}
 					<a class="header-link" href="/login">Sign&nbsp;in</a>
 					<a class="header-link rounded" href="/register">Sign&nbsp;up</a>
+
 					{% endif %}
 				</div>
 			</div>
