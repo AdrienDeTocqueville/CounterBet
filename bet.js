@@ -1,7 +1,8 @@
 const db = require("./db.js");
 
-function register_bet(bet)
+async function register_bet(bet)
 {
+	db.addbet(bet);
 	console.log(bet);
 }
 

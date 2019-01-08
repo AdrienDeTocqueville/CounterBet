@@ -32,7 +32,7 @@
 				</div>
 				<div id="bet-amount">
 					<a>How much do you bet ?</a>
-					<input tpe="number">
+					<input type="number" id="num">
 				</div>
 				<div id="bet-error">
 					<a>You must select a team !</a>
@@ -41,7 +41,7 @@
 		</div>
 
 		{% if match.winner == null %}
-		<button onclick="bet()">Make a bet !</button>
+		<button onclick="bet({{match.id}}, {{match.date}})">Make a bet !</button>
 		<br>
 		<br>
 		{% endif %}
