@@ -45,7 +45,6 @@ async function send_bet(team,id,num,date)
 			const response = await rawResponse.json();
 
 			console.log(response);
-			location.reload();
 			alert("Paris pris en compte");
 		 })();
 	}
