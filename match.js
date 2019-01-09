@@ -19,14 +19,24 @@ async function process(match) {
 		if (!match.team1 || !match.team2)
 			return;
 
-		// Matches
-		function filter(arr) {
-			return arr.filter(m => m.id != match.id);
+		// History
+		async function get_history(team1, team2) {
+			let hist = await db.getMatches(team1, team2, 5, match.date);
+
+			hist.forEach(m => {
+				if (m.team1.id != team1.id) {
+					let temp = m.team2;
+					m.team2 = m.team1;
+					m.team1 = temp;
+					m.score.reverse();
+				}
+			})
+			return hist;
 		}
 
-		match.history = filter(await db.getMatches(match.team1, match.team2, 5));
-		match.team1.history = filter(await db.getMatches(match.team1, 5));
-		match.team2.history = filter(await db.getMatches(match.team2, 5));
+		match.history = await get_history(match.team1, match.team2);
+		match.team1.history = await get_history(match.team1, null);
+		match.team2.history = await get_history(match.team2, null);
 
 		// Teams
 		let promise = [db.getTeam(match.team1.id), db.getTeam(match.team2.id)];

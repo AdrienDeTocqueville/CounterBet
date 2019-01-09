@@ -53,7 +53,7 @@
 			</main>
 		</div>
 
-		{% if match.winner == null %}
+		{% if match.winner == null and match.live == false %}
 		<button onclick="bet({{match.id}}, {{match.date}})">Make a bet !</button>
 		<br>
 		<br>
@@ -64,10 +64,12 @@
 			{% if match.history and match.history.length %}
 				{% for prev_match in match.history %}
 					<div class="prev_match">
-					{{prev_match.date}}
-					{{prev_match.team1.name}}
-					{{prev_match.team2.name}}
-					{{prev_match.winner}}
+						<i>{{date(prev_match.date)}}</i>
+						-
+						<strong>{{prev_match.team1.name}}</strong>
+						VS
+						<strong>{{prev_match.team2.name}}</strong>
+						{{prev_match.score[0]}} - {{prev_match.score[1]}}
 					</div>
 				{% endfor %}
 			{% else %}
@@ -75,17 +77,17 @@
 			{% endif %}
 		</div>
 
-		{% macro prev_matches(team) %}
+		{% macro prev_matches(team, other) %}
 		{% if team.history and team.history.length %}
 		<br>
 		<div class="pannel">
 			<header class="title"> Previous matches - {{team.name}} </header>
 			{% for prev_match in team.history %}
 				<div class="prev_match">
-					{{prev_match.date}}
-					{{prev_match.team1.name}}
-					{{prev_match.team2.name}}
-					{{prev_match.winner}}
+					<i>{{date(prev_match.date)}}</i>
+					-
+					Against <strong>{{prev_match.team2.name}}</strong>
+					{{prev_match.score[0]}} - {{prev_match.score[1]}}
 				</div>
 			{% endfor %}
 		</div>

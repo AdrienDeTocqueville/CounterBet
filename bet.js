@@ -5,6 +5,9 @@ async function register_bet(username, bet)
 	console.log(username, bet);
 	if (!username)
 		return {error: 1, msg: 'Not connected'};
+	//TODO: refuse bet if match is live
+	//if (...)
+		//return {error: 1, msg: 'Match already started'};
 
 	let res = await db.addBet(username, bet);
 	console.log(res)
