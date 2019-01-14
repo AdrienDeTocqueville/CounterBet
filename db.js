@@ -127,6 +127,19 @@ function getUser(username) {
 	return db.collection("users").findOne({ username });
 }
 
+function getBet(username, matchId) {
+	return db.collection("users").findOne({
+		username,
+		bets: {
+			$elemMatch: {
+				id: matchId
+			}
+		}
+	}, {
+		projection: { "bets.$": 1 }
+	});
+}
+
 
 async function connect(url, refreshTime) {
 	url = url || "mongodb://127.0.0.1:27017";
@@ -235,6 +248,12 @@ async function addBet(username, bet) {
 	});
 }
 
+async function removeBet(username, matchId) {
+	return db.collection("users").updateOne({ username }, {
+		$pull: { bets: { id: matchId } }
+	});
+}
+
 
 module.exports = {
 	getUpcomingMatches,
@@ -243,10 +262,12 @@ module.exports = {
 	getMatch,
 	getTeam,
 	getUser,
+	getBet,
 
 	register,
 	login,
 	addBet,
+	removeBet,
 
 	connect
 };

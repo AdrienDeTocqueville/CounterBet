@@ -17,22 +17,21 @@ function bet_for(i, team)
 	selected = team;
 }
 
-function bet(id, date)
+function bet(id)
 {
 	if (display == 'none')
 		document.querySelector("#bet").style.display = display = 'block';
 	else if (!selected)
 		error.style.display = 'block';
 	else
-		send_bet(selected,id,document.getElementById("num").value,date);
+		send_bet(selected, id, document.getElementById("num").value);
 }
 
-async function send_bet(team,id,num,date)
+async function send_bet(team, id, num)
 {
 	let endpoint = "/bet";
-	let body = `team=${team}&match=${id}&price=${num}&date=${date}`;
+	let body = {team, id, num, date: Date().now};
 	
-
 	try {
 		(async () => {
 			const rawResponse = await fetch(endpoint, {
@@ -40,13 +39,43 @@ async function send_bet(team,id,num,date)
 				headers: {
 					"Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
 				},
-				body
+				body: "json="+JSON.stringify(body)
 			});
 			const response = await rawResponse.json();
 
 			console.log(response);
 			if (response.error)
 				alert(response.msg);
+			else
+				location.reload();
+		 })();
+	}
+	catch (e) {
+		console.error(e);
+	}
+}
+
+async function cancel_bet(id)
+{
+	let endpoint = "/bet";
+	let body = {cancel: 1, id};
+	
+	try {
+		(async () => {
+			const rawResponse = await fetch(endpoint, {
+				method: 'POST',
+				headers: {
+					"Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+				},
+				body: "json="+JSON.stringify(body)
+			});
+			const response = await rawResponse.json();
+
+			console.log(response);
+			if (response.error)
+				alert(response.msg);
+			else
+				location.reload();
 		 })();
 	}
 	catch (e) {

@@ -58,7 +58,7 @@ db.connect().then(() => {
 		try_goto(team, res, req, 'team.html', { team });
 	})
 	.get('/match/:match', async function (req, res) {
-		let match = await matchUtils.process(await db.getMatch(req.params.match));
+		let match = await matchUtils.getMatch(req);
 		try_goto(match, res, req, 'match.html', { match, date: time.toString });
 	})
 	.get('/tournament/:tournament', async function (req, res) {
@@ -108,7 +108,7 @@ db.connect().then(() => {
 			res.redirect("/register?fail=true");
 	})
 	.post('/bet', async function(req,res) {
-		let response = await bet.register_bet(req.session.username, req.body);
+		let response = await bet.register_bet(req);
 		res.end(JSON.stringify(response));
 	})
 

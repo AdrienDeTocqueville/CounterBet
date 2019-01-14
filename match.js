@@ -9,7 +9,10 @@ function getStreamUrl(match) {
 	return null;
 }
 
-async function process(match) {
+async function getMatch(req) {
+	let user = req.session.username;
+	let match = await db.getMatch(req.params.match)
+
 	if (match)
 	{
 		// Stream
@@ -24,9 +27,9 @@ async function process(match) {
 			return arr.filter(m => m.id != match.id);
 		}
 
-		match.history = filter(await db.getMatches(match.team1, match.team2, 5));
-		match.team1.history = filter(await db.getMatches(match.team1, 5));
-		match.team2.history = filter(await db.getMatches(match.team2, 5));
+		match.history = db.getMatches(match.team1, match.team2, 5).then(filter);
+		match.team1.history = db.getMatches(match.team1, 5).then(filter);
+		match.team2.history = db.getMatches(match.team2, 5).then(filter);
 
 		// Teams
 		let promise = [db.getTeam(match.team1.id), db.getTeam(match.team2.id)];
@@ -43,10 +46,24 @@ async function process(match) {
 		} catch (e) {
 			return null;
 		}
+
+		// Bet
+		let bet = db.getBet(user, match.id).then(bet => {
+			if (bet)
+				match.bet = bet.bets[0];
+		});
+
+		// Wait for requests
+		await Promise.all([
+			match.history,
+			match.team1.history,
+			match.team2.history,
+			bet
+		]);
 	}
 	return match;
 }
 
 module.exports = {
-	process
+	getMatch
 };

@@ -32,6 +32,7 @@
 		
 		<br>
 
+		{% if match.bet == null %}
 		<div class="pannel" id="bet">
 			<header class="title"> Pick a winner </header>
 			<main>
@@ -54,7 +55,19 @@
 		</div>
 
 		{% if match.winner == null %}
-		<button onclick="bet({{match.id}}, {{match.date}})">Make a bet !</button>
+		<button onclick="bet({{match.id}})">Make a bet !</button>
+		<br>
+		<br>
+		{% endif %}
+		{% else %}
+		<div class="pannel">
+			<header class="title"> Your Bet </header>
+			<main>
+				{{date(match.bet.date)}} You bet for '{{match.bet.team}}'
+				num: {{match.bet.num}}
+			</main>
+		</div>
+		<button onclick="cancel_bet({{match.bet.id}})">Cancel bet</button>
 		<br>
 		<br>
 		{% endif %}
@@ -97,7 +110,7 @@
 
 
 		<a href="/tournament/{{match.tournament.id}}">Tournament: {{match.tournament.name}}</a>
-		<p style="white-space:pre-wrap;"> {{ {title:match.title, winner: match.winner, cote: match.cote, format: match.format } | dump('\t') }} </p>
+		<p style="white-space:pre-wrap;"> {{ {title:match.title, bet: match.bet, winner: match.winner, cote: match.cote, format: match.format } | dump('\t') }} </p>
 	</div>
 
 
