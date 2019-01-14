@@ -30,7 +30,7 @@ function bet(id)
 async function send_bet(team, id, num)
 {
 	let endpoint = "/bet";
-	let body = {team, id, num, date: Date().now};
+	let body = {team, id, num, date: Date.now()};
 	
 	try {
 		(async () => {

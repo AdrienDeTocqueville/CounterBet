@@ -38,7 +38,7 @@ async function getMatch(req) {
 		}
 
 		let wait = [
-			getMatches(match.team1, match.team2).then(hist => {match.history = hist}),
+			get_history(match.team1, match.team2).then(hist => {match.history = hist}),
 			get_history(match.team1, null).then(hist => {match.team1.history = hist}),
 			get_history(match.team2, null).then(hist => {match.team2.history = hist})
 		];
