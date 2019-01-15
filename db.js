@@ -317,6 +317,26 @@ async function removeBet(username, matchId) {
 	});
 }
 
+async function checkMatches(){
+	let test= await db.collection("matches").find( {winner : null}).toArray();
+	var date = new Date();
+	var tab = [];
+	for (i=0; i<test.length; i++){
+		if( date > test[i].date){
+			tab.push(test[i].id);
+		}
+	}
+	console.log(updateMatches(tab));
+	
+}
+
+async function checkpoint(username){
+	let test = await db.collection("users").find({username: username }).bets.toArray();
+	
+	console.log(test);
+}
+
+
 
 module.exports = {
 	getUpcomingMatches,
@@ -334,5 +354,8 @@ module.exports = {
 	addBet,
 	removeBet,
 
-	connect
+	connect,
+
+	checkMatches,
+	checkpoint
 };
