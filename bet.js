@@ -2,11 +2,7 @@ const db = require("./db.js");
 
 async function register_bet(req)
 {
-<<<<<<< HEAD
-	db.addbet(bet);
-	db.checkMatches();
-	console.log(bet);
-=======
+	//db.checkMatches();
 	let username = req.session.username;
 	if (!username)
 		return {error: 1, msg: 'Not connected'};
@@ -32,12 +28,12 @@ async function register_bet(req)
 	else
 	{
 		let res = await db.addBet(username, bet);
+		db.checkpoint(username);
 		if (res.result.ok)
 			return {msg: 'Success'};
 	}
 
 	return {error: 2, msg: 'Unknown error. Try again'};
->>>>>>> e58283e0d37d466adf2a650ce6731f52560ebe74
 }
 
 module.exports = {

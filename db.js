@@ -269,10 +269,6 @@ async function login(user) {
 	return null;
 }
 
-<<<<<<< HEAD
-async function addbet(bet) {
-	await db.collection("users").updateOne({ username: "adrien" }, { $push : { paris : bet } });
-=======
 async function addBet(username, bet) {
 	return db.collection("users").updateOne({ username }, {
 		$push : { bets : bet }
@@ -283,7 +279,6 @@ async function removeBet(username, matchId) {
 	return db.collection("users").updateOne({ username }, {
 		$pull: { bets: { id: matchId } }
 	});
->>>>>>> e58283e0d37d466adf2a650ce6731f52560ebe74
 }
 
 async function checkMatches(){
@@ -299,6 +294,14 @@ async function checkMatches(){
 	
 }
 
+async function checkpoint(username){
+	let test = await db.collection("users").find({username: username }).bets.toArray();
+	
+	console.log(test);
+}
+
+
+
 module.exports = {
 	getUpcomingMatches,
 	getTournament,
@@ -313,13 +316,8 @@ module.exports = {
 	addBet,
 	removeBet,
 
-<<<<<<< HEAD
 	connect,
 
-	addbet,
-
-	checkMatches
-=======
-	connect
->>>>>>> e58283e0d37d466adf2a650ce6731f52560ebe74
+	checkMatches,
+	checkpoint
 };
