@@ -123,7 +123,7 @@ function getMatches(team1, team2, max, before) {
 		query = { $or: [{ team1: team1 }, { team2: team1 }] }
 
 	return db.collection("matches")
-		.find({ $and: [query, { winner: {$ne: null} }, { date: {$lt: before} }] })
+		.find({ $and: [query, { winner: { $ne: null } }, { date: { $lt: before } }] })
 		.sort({ date: 1 })
 		.limit(max)
 		.toArray();
@@ -163,8 +163,8 @@ function getBet(username, matchId) {
 			}
 		}
 	}, {
-		projection: { "bets.$": 1 }
-	});
+			projection: { "bets.$": 1 }
+		});
 }
 
 
@@ -271,7 +271,7 @@ async function login(user) {
 
 async function addBet(username, bet) {
 	return db.collection("users").updateOne({ username }, {
-		$push : { bets : bet }
+		$push: { bets: bet }
 	});
 }
 
@@ -281,23 +281,38 @@ async function removeBet(username, matchId) {
 	});
 }
 
-async function checkMatches(){
-	let test= await db.collection("matches").find( {winner : null}).toArray();
+async function checkMatches() {
+	let test = await db.collection("matches").find({ winner: null }).toArray();
 	var date = new Date();
 	var tab = [];
-	for (i=0; i<test.length; i++){
-		if( date > test[i].date){
+	for (i = 0; i < test.length; i++) {
+		if (date > test[i].date) {
 			tab.push(test[i].id);
 		}
 	}
 	console.log(updateMatches(tab));
-	
+
 }
 
-async function checkpoint(username){
-	let test = await db.collection("users").find({username: username }).bets.toArray();
-	
-	console.log(test);
+async function checkpoint(username) {
+	let test = await db.collection("users").findOne({ username: username });
+	let bet = test.bets;
+	let idbet = [];
+	let teambet = [];
+	let point=test.point;
+	for (i = 0; i < bet.length; i++) {
+		idbet.push(bet[i].id);
+		teambet.push(bet[i].team);
+		let match = await db.collection("matches").findOne({ id: idbet[i] });
+		let ggmatche = match.winner;
+		if (ggmatche != null && ggmatche.name == teambet[i]) {
+			let newpoint = point +  parseInt(bet[i].num) ;
+			db.collection("users").updateOne({ username : username }, {$set: { point : newpoint }});
+		} else {
+			console.log("not gg");
+			
+		}
+	}
 }
 
 
