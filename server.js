@@ -49,13 +49,13 @@ function do_goto(res, req, file, ctx) {
 }
 
 db.connect().then(() => {
+
+	// PAGES
 	app.get('/', async function (req, res) {
 		let matches = await db.getUpcomingMatches();
-		try_goto(matches, res, req, 'index.html', { matches, date: time.toString});
-	})
-	.get('/team/:team', async function (req, res) {
-		let team = await db.getTeam(req.params.team);
-		try_goto(team, res, req, 'team.html', { team });
+		let users = await db.getLeaderboard(10);
+		let teams = await db.getBestTeams(10);
+		try_goto(matches, res, req, 'index.html', { matches, users, teams, date: time.toString});
 	})
 	.get('/match/:match', async function (req, res) {
 		let match = await matchUtils.getMatch(req);
@@ -73,8 +73,8 @@ db.connect().then(() => {
 		let match = await db.getMatch(req.params.match);
 		try_goto(match, res, req, 'match.html', { match });
 	})
-	.get('/user/:username', async function (req, res) {
-		let user = await db.getUser(req.params.username);
+	.get('/user/:name', async function (req, res) {
+		let user = await db.getUser(req.params.name);
 		try_goto(user, res, req, 'user.html', { user });
 	})
 	.get('/leaderboard', async function (req, res) {
@@ -93,19 +93,15 @@ db.connect().then(() => {
 		req.session.username = null;
 		res.redirect('/');
 	})
-	.post('/login', async function (req, res) {
-		req.session.username = await db.login(req.body);
-		if (req.session.username)
-			res.redirect(`/user/${req.session.username}`);
-		else
-			res.redirect("/login?fail=true");
 
+	// ENDPOINTS
+	.post('/login', async function (req, res) {
+		let response = await db.login(req);
+		res.end(JSON.stringify(response));
 	})
 	.post('/register', async function (req, res) {
-		if (await db.register(req.body))
-			res.redirect("/");
-		else
-			res.redirect("/register?fail=true");
+		let response = await db.register(req.body);
+		res.end(JSON.stringify(response));
 	})
 	.post('/bet', async function(req,res) {
 		let response = await bet.register_bet(req);
