@@ -231,9 +231,21 @@ async function login(user) {
 }
 
 async function addbet(bet) {
-	await db.collection("users").updateOne({ username: "franck" }, { $push : { paris : bet } });
+	await db.collection("users").updateOne({ username: "adrien" }, { $push : { paris : bet } });
 }
 
+async function checkMatches(){
+	let test= await db.collection("matches").find( {winner : null}).toArray();
+	var date = new Date();
+	var tab = [];
+	for (i=0; i<test.length; i++){
+		if( date > test[i].date){
+			tab.push(test[i].id);
+		}
+	}
+	console.log(updateMatches(tab));
+	
+}
 
 module.exports = {
 	getUpcomingMatches,
@@ -248,5 +260,7 @@ module.exports = {
 
 	connect,
 
-	addbet
+	addbet,
+
+	checkMatches
 };
