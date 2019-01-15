@@ -6,17 +6,17 @@ async function register_bet(req)
 	let username = req.session.username;
 	if (!username)
 		return {error: 1, msg: 'Not connected'};
-	//TODO: refuse bet if match is live
-	//if (...)
-		//return {error: 1, msg: 'Match already started'};
-
 
 	let bet;
 	try {
 		bet = JSON.parse(req.body.json);
 	} catch (e) {
-		return {error: 3, msg: 'Invalid payload'};
+		return {error: 4, msg: 'Invalid payload'};
 	}
+
+	let match = await db.getMatch(bet.id);
+	if (match.date < Date.now())
+		return {error: 2, msg: 'Match already started'};
 
 
 	if (bet.cancel)
@@ -33,7 +33,7 @@ async function register_bet(req)
 			return {msg: 'Success'};
 	}
 
-	return {error: 2, msg: 'Unknown error. Try again'};
+	return {error: 3, msg: 'Unknown error. Try again'};
 }
 
 module.exports = {

@@ -112,6 +112,22 @@ function getUpcomingMatches(max) {
 		.toArray();
 }
 
+function getLeaderboard(max) {
+	return db.collection("users")
+		.find({ }, {projection: {name: 1, points: 1}})
+		.sort({ points: -1 })
+		.limit(max || 10)
+		.toArray();
+}
+
+function getBestTeams(max) {
+	return db.collection("teams")
+		.find({ rank: {$ne: null} }, {projection: {name: 1, rank: 1}})
+		.sort({ rank: 1 })
+		.limit(max || 10)
+		.toArray();
+}
+
 function getMatches(team1, team2, max, before) {
 	max = max || 10;
 	before = before || Date.now();
@@ -150,13 +166,13 @@ async function getTeam(id) {
 	return team || downloadTeam(id);
 }
 
-function getUser(username) {
-	return db.collection("users").findOne({ username });
+function getUser(name) {
+	return db.collection("users").findOne({ name });
 }
 
 function getBet(username, matchId) {
 	return db.collection("users").findOne({
-		username,
+		name: username,
 		bets: {
 			$elemMatch: {
 				id: matchId
@@ -235,48 +251,68 @@ function verifyRegister(user) {
 	const mailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 	if (!user.mail.match(mailRegex))
-		return null;
+		return {error: 2, msg: "Invalid email address"};
 	if (user.password != user.confirm)
-		return null;
+		return {error: 3, msg: "Passwords do not match"};
 
-	user.password = hashPassword(user.password);
-	delete user._id;
-	delete user.confirm;
+	let hash = hashPassword(user.password);
 
-	return user;
+	return {
+		name: user.username,
+		email: user.mail,
+		password: hash,
+		points: 0
+	};
 }
 
 async function register(user) {
-	user = verifyRegister(user);
-	if (user) {
-		try {
-			await db.collection('users').insertOne(user);
-		}
-		catch (e) {
-			console.log(e);
-			return null;
-		}
+	try {
+		user = verifyRegister(JSON.parse(user.json))
+	} catch (e) {
+		return {error: 5, msg: 'Invalid payload'};
 	}
-	return user;
+
+	if (user.error)
+		return user;
+	if (await db.collection("users").findOne({ name: user.name }))
+		return {error: 1, msg: "User already exists"};
+
+	try {
+		await db.collection('users').insertOne(user);
+	}
+	catch (e) {
+		console.log(e);
+		return {error: 4, msg: "Unknown error"};
+	}
+	return {msg: 'Success'};
 }
 
-async function login(user) {
-	let res = await db.collection("users").findOne({ username: user.username });
-	if (res != null) {
-		if (user.password == unhashPassword(res.password))
-			return user.username;
+async function login(req) {
+	let user
+	try {
+		user = JSON.parse(req.body.json);
+	} catch (e) {
+		return {error: 5, msg: 'Invalid payload'};
 	}
-	return null;
+
+	let res = await db.collection("users").findOne({ name: user.username });
+	if (res == null)
+		return {error: 1, msg: "User does not exist"};
+	if (user.password != unhashPassword(res.password))
+		return {error: 2, msg: "Incorrect password"};
+
+	req.session.username = res.name;
+	return {msg: 'Success'};
 }
 
 async function addBet(username, bet) {
-	return db.collection("users").updateOne({ username }, {
-		$push: { bets: bet }
+	return db.collection("users").updateOne({ name: username }, {
+		$push : { bets : bet }
 	});
 }
 
 async function removeBet(username, matchId) {
-	return db.collection("users").updateOne({ username }, {
+	return db.collection("users").updateOne({ name: username }, {
 		$pull: { bets: { id: matchId } }
 	});
 }
@@ -319,6 +355,8 @@ async function checkpoint(username) {
 
 module.exports = {
 	getUpcomingMatches,
+	getLeaderboard,
+	getBestTeams,
 	getTournament,
 	getMatches,
 	getMatch,
