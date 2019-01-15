@@ -1,7 +1,45 @@
 const mongo = require("mongodb").MongoClient;
 const { HLTV } = require("hltv");
 const crypto = require("crypto");
+
 let db = null;
+
+function parse_match(id, raw) {
+	let match = {
+		id,
+		tournament: raw.event,
+		format: raw.format,
+
+		team1: raw.team1,
+		team2: raw.team2,
+		winner: raw.winnerTeam,
+
+		date: raw.date,
+		live: raw.live,
+		streams: raw.streams
+	};
+
+	if (match.winner && raw.maps) {
+		let wins = [0, 0];
+		let score;
+		for (let map of raw.maps) {
+			score = map.result.substring(0, map.result.search(" "));
+			score = score.split(':').map(x => parseInt(x))
+			if (score.length != 2)
+				break;
+
+			if (score[0] > score[1])
+				wins[0]++;
+			if (score[0] < score[1])
+				wins[1]++;
+		}
+		match.score = (raw.maps.length == 1) ? score : wins;
+	}
+
+	match.cote = 1;
+
+	return match;
+}
 
 async function updateMatches(ids) {
 	let updates = [];
@@ -38,19 +76,7 @@ async function downloadTournament(id, insert) {
 async function downloadMatch(id, insert) {
 	console.log("Downloading match #" + id);
 	try {
-		let match = await HLTV.getMatch({ id }).then(match => ({
-			id: id,
-			title: match.title,
-			team1: match.team1,
-			team2: match.team2,
-			winner: match.winnerTeam,
-			date: match.date,
-			live: match.live,
-			cote: 1,
-			tournament: match.event,
-			streams: match.streams,
-			format: match.format
-		}));
+		let match = parse_match(id, await HLTV.getMatch({ id }));
 
 		if (insert || insert === undefined)
 			db.collection("matches").insertOne(match);
@@ -86,19 +112,20 @@ function getUpcomingMatches(max) {
 		.toArray();
 }
 
-function getMatches(team1, team2, max) {
+function getMatches(team1, team2, max, before) {
+	max = max || 10;
+	before = before || Date.now();
+
 	let query;
-	if (arguments.length == 2) {
-		query = { $or: [{ team1: team1 }, { team2: team1 }] }
-		max = team2;
-	} else {
+	if (team2)
 		query = { $or: [{ team1, team2 }, { team1: team2, team2: team1 }] }
-	}
+	else
+		query = { $or: [{ team1: team1 }, { team2: team1 }] }
+
 	return db.collection("matches")
-		.find(query)
-		//.find({ $and: [query, { winner: {$ne: null} }] })
+		.find({ $and: [query, { winner: {$ne: null} }, { date: {$lt: before} }] })
 		.sort({ date: 1 })
-		.limit(max || 10)
+		.limit(max)
 		.toArray();
 }
 
@@ -125,6 +152,19 @@ async function getTeam(id) {
 
 function getUser(username) {
 	return db.collection("users").findOne({ username });
+}
+
+function getBet(username, matchId) {
+	return db.collection("users").findOne({
+		username,
+		bets: {
+			$elemMatch: {
+				id: matchId
+			}
+		}
+	}, {
+		projection: { "bets.$": 1 }
+	});
 }
 
 
@@ -207,7 +247,6 @@ function verifyRegister(user) {
 }
 
 async function register(user) {
-	console.log("register", user)
 	user = verifyRegister(user);
 	if (user) {
 		try {
@@ -230,8 +269,21 @@ async function login(user) {
 	return null;
 }
 
+<<<<<<< HEAD
 async function addbet(bet) {
 	await db.collection("users").updateOne({ username: "adrien" }, { $push : { paris : bet } });
+=======
+async function addBet(username, bet) {
+	return db.collection("users").updateOne({ username }, {
+		$push : { bets : bet }
+	});
+}
+
+async function removeBet(username, matchId) {
+	return db.collection("users").updateOne({ username }, {
+		$pull: { bets: { id: matchId } }
+	});
+>>>>>>> e58283e0d37d466adf2a650ce6731f52560ebe74
 }
 
 async function checkMatches(){
@@ -254,13 +306,20 @@ module.exports = {
 	getMatch,
 	getTeam,
 	getUser,
+	getBet,
 
 	register,
 	login,
+	addBet,
+	removeBet,
 
+<<<<<<< HEAD
 	connect,
 
 	addbet,
 
 	checkMatches
+=======
+	connect
+>>>>>>> e58283e0d37d466adf2a650ce6731f52560ebe74
 };

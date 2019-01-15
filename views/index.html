@@ -8,6 +8,7 @@
 
 {% block content %}
 <main id="index-main">
+	
 	<div id="left">
 		<h1>Leaderboards</h1>
 		<br>
@@ -31,35 +32,26 @@
 		<br>
 
 		{% for match in matches %}
-			<a href="/match/{{match.id}}">
-				
-
-
-				<div class="pannel">
-					<header>
-						{% if match.live %}
-							<p class="live">LIVE</p>
-						{% else %}
-							<p>{{date(match.date)}}</p>
-						{% endif %}
-
-						<p>{{match.tournament.name}}</p>
-					</header>
+		<div class="pannel">
+				<a href="/match/{{match.id}}">
+					{{ pannels.match_header(match, date) }}
 					<main>
+						<a href="/match/{{match.id}}">
 						<div class="matchup">
-							<div class="team">
-								<img src="https://static.hltv.org/images/team/logo/{{match.team1.id}}">
-									{{match.team1.name}}
+							<div class="c40">
+							{{ pannels.match_content(match.team1) }}
 							</div>
-							<p>VS</p>
-							<div class="team">
-								<img src="https://static.hltv.org/images/team/logo/{{match.team2.id}}">
-								{{match.team2.name}}
+							<div class="c20">
+							VS
 							</div>
-						</div>
+							<div class="c40">
+							{{ pannels.match_content(match.team2) }}
+							</div>
+						</div> 
 					</main>
 				</div>
 			</a>
+			<br>
 		{% endfor %}
 	</div>
 

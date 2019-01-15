@@ -9,7 +9,10 @@ function getStreamUrl(match) {
 	return null;
 }
 
-async function process(match) {
+async function getMatch(req) {
+	let user = req.session.username;
+	let match = await db.getMatch(req.params.match)
+
 	if (match)
 	{
 		// Stream
@@ -19,14 +22,26 @@ async function process(match) {
 		if (!match.team1 || !match.team2)
 			return;
 
-		// Matches
-		function filter(arr) {
-			return arr.filter(m => m.id != match.id);
+		// History
+		async function get_history(team1, team2) {
+			let hist = await db.getMatches(team1, team2, 5, match.date);
+
+			hist.forEach(m => {
+				if (m.team1.id != team1.id) {
+					let temp = m.team2;
+					m.team2 = m.team1;
+					m.team1 = temp;
+					m.score.reverse();
+				}
+			})
+			return hist;
 		}
 
-		match.history = filter(await db.getMatches(match.team1, match.team2, 5));
-		match.team1.history = filter(await db.getMatches(match.team1, 5));
-		match.team2.history = filter(await db.getMatches(match.team2, 5));
+		let wait = [
+			get_history(match.team1, match.team2).then(hist => {match.history = hist}),
+			get_history(match.team1, null).then(hist => {match.team1.history = hist}),
+			get_history(match.team2, null).then(hist => {match.team2.history = hist})
+		];
 
 		// Teams
 		let promise = [db.getTeam(match.team1.id), db.getTeam(match.team2.id)];
@@ -43,10 +58,19 @@ async function process(match) {
 		} catch (e) {
 			return null;
 		}
+
+		// Bet
+		wait.push(db.getBet(user, match.id).then(bet => {
+			if (bet)
+				match.bet = bet.bets[0];
+		}));
+
+		// Wait for requests
+		await Promise.all(wait);
 	}
 	return match;
 }
 
 module.exports = {
-	process
+	getMatch
 };
