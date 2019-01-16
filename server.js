@@ -8,6 +8,7 @@ const db = require("./db.js");
 const bet = require("./bet.js");
 const time = require("./time.js");
 const matchUtils = require("./match.js");
+const userUtils = require("./user.js");
 
 
 var app = express();
@@ -74,7 +75,7 @@ db.connect().then(() => {
 			try_goto(match, res, req, 'match.html', { match });
 		})
 		.get('/user/:name', async function (req, res) {
-			let user = await db.getUser(req.params.name);
+			let user = await userUtils.getUser(req.params.name);
 			try_goto(user, res, req, 'user.html', { user });
 		})
 		.get('/leaderboard', async function (req, res) {
