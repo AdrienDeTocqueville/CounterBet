@@ -20,10 +20,10 @@
 	<div id="right">
 
 		<h1>Your Bets</h1>
+		<h2>Incoming</h2>
 		{% for bet in user.bets %}
 		{{ bet | dump('\t') }}
 
-		<h2>Incoming</h2>
 		{%if not match.score%}
 		<div class="pannel">
 			<a href="/match/{{ bet.match.id }}">
