@@ -1,26 +1,72 @@
 {% extends "base.html" %}
+{% import "pannels.html" as pannels %}
 
+{% block link %}
+<link rel="stylesheet" type="text/css" href="/css/index.css">
+<link rel="stylesheet" type="text/css" href="/css/pannel.css">
+{% endblock %}
 
 {% block content %}
+<main id="index-main">
 
-<h1> Utilisateur </h1>
-<br>Name : {{ user.name }}
-<br>Email : {{user.email}}
-<br>Total points : {{ user.points }}
+	<div id="left">
 
-<h1> Vos Paris</h1>
-{% for bet in user.bets %}
-	<h2>{{bet.teams1}} vs {{bet.teams2}} </h2>
+		<h1> Utilisateur </h1>
+		<br>Name : {{ user.name }}
+		<br>Email : {{user.email}}
+		<br>Total points : {{ user.points }}
 
-	{% if bet.info == 1 %}
+	</div>
+	<div id="right">
+
+		<h1>Your Bets</h1>
+		{% for bet in user.bets %}
+		{{ bet | dump }}
+		<h2>Incoming</h2>
+		<div class="pannel">
+			<a href="/match/{{ bet.match.id }}">
+				{{ pannels.match_header(bet.match, date) }}
+				<main>
+					<a href="/match/{{ bet.match.id }}">
+						<div class="matchup">
+							<div class="c40">
+								{{ bet.match.team1.name }}
+							</div>
+							<div class="c20">
+								{{ bet.match.format }}
+							</div>
+							<div class="c40">
+								{{ bet.match.team2.name }}
+							</div>
+						</div>
+						<div class="matchup">
+							<div class="c40">
+								You bet {{bet.num}}pt on {{bet.team}}
+							</div>
+							<div class="c20">
+								a
+							</div>
+							<div class="c40">
+								b
+							</div>
+						</div>
+				</main>
+		</div></a>
+
+		<h2>Finished</h2>
+
+		{% if bet.info == 1 %}
 		<h4>Gagné</h4>
 		<span class="label label.default">{{bet.point}} points </span>
-	{% else %}
+		{% else %}
 		<h4>Perdu</h4>
 		<span class="label label.default">0 points </span>
-	{% endif %}
+		{% endif %}
 
-{% endfor %}
+		{% endfor %}
+
+	</div>
 
 
-{% endblock %}
+
+	{% endblock %}

@@ -8,10 +8,21 @@
 
 {% block content %}
 
-<h1>{{ tournament.name }}</h1>
-<h3>From {{ date(tournament.startDate) }} until {{ date(tournament.endDate) }}</h3>
+<p style="text-align : center;">
+		<img style="width: 300px;" src="https://static.hltv.org/images/eventLogos/{{ tournament.id }}.png">
+</p>
+<h1 style="text-align : center;">{{ tournament.name }}</h1>
 
-<div style="padding : 2px 10px;">
+<p style="text-align:left; padding : 5px 25px; font-size: 1.17em">
+	<strong>
+		Start {{ date(tournament.startDate) }}
+		<span style="float:right;">End {{ date(tournament.endDate) }}</span>
+	</strong>
+</p>
+
+
+
+<div style="padding : 2px 25px;">
 	{% for team in tournament.teams %}
 	<div style="display: inline-block; position: relative;" href="/team/{{team.id}}">
 		{{ pannels.match_content(team) }}
