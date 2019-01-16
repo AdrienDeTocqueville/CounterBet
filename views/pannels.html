@@ -1,21 +1,25 @@
 {% macro match_header(match, date) %}
 <header>
 	{% if match.live %}
-		<p class="live">LIVE</p>
+	<p class="live">LIVE</p>
 	{% else %}
-		<p>{{date(match.date)}}</p>
+	<p>{{date(match.date)}}</p>
 	{% endif %}
-	
-	<p>	<a href="/tournament/{{match.tournament.id}}">
-		{{match.tournament.name}}
-	</a></p>
-	
+
+	<p> <a href="/tournament/{{match.tournament.id}}">
+			{{match.tournament.name}}
+		</a></p>
+
 </header>
 {% endmacro %}
 
 {% macro match_content(team) %}
-	<div class="team">
-		<img src="https://static.hltv.org/images/team/logo/{{team.id}}">
-		{{team.name}}
-	</div>
+<div class="team">
+	<img src="https://static.hltv.org/images/team/logo/{{team.id}}">
+	{{team.name}}
+</div>
+{% endmacro %}
+
+{% macro team_icon(team) %}
+<img src="https://static.hltv.org/images/team/logo/{{team.id}}">
 {% endmacro %}
