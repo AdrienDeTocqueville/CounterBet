@@ -1,12 +1,7 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Sign up - CounterBet</title>
-		<meta charset="utf-8" />
-		<link rel="stylesheet" type="text/css" href="/css/base.css">
-		<link rel="stylesheet" type="text/css" href="/css/login.css">
-	</head>
 
+<<<<<<< HEAD
 	<body>
 		<header>
 			<a href="/">
@@ -24,42 +19,69 @@
 					<button type="submit" value="Submit">Sign up</button>
 				</form>
 			</div>
+=======
+<head>
+	<title>Sign up - CounterBet</title>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" type="text/css" href="/css/base.css">
+	<link rel="stylesheet" type="text/css" href="/css/login.css">
+</head>
+
+<body>
+	<header>
+		<a href="/">
+			<img width="48px" src="/img/logo.png" alt="">
+		</a>
+	</header>
+	<div class="login-page">
+		<div class="error"> </div>
+		<div class="form">
+			<form class="login-form" onsubmit="return register()">
+				<input type="text" name="username" placeholder="Username" required />
+				<input type="email" autocomplete="on" name="mail" placeholder="Email" required />
+				<input type="password" name="password" placeholder="Password" required />
+				<input type="password" name="confirm" placeholder="Confirm password" required />
+				<input type="hidden" name="point" required />
+				<button type="submit" value="Submit">Sign up</button>
+			</form>
+>>>>>>> f318bf353c163b96029c3f6d69275acf96fa9a15
 		</div>
-	</body>
-	
-	<script type="text/javascript">
-		function register() {
-			let formData = new FormData(document.querySelector('.login-form'));
-			let endpoint = "/register";
-			let body = {};
-			
-			for(let pair of formData.entries())
-				body[pair[0]] = pair[1];
+	</div>
+</body>
 
-			try {
-				(async () => {
-					const rawResponse = await fetch(endpoint, {
-						method: 'POST',
-						headers: {
-							"Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
-						},
-						body: "json="+JSON.stringify(body)
-					});
-					const response = await rawResponse.json();
+<script type="text/javascript">
+	function register() {
+		let formData = new FormData(document.querySelector('.login-form'));
+		let endpoint = "/register";
+		let body = {};
 
-					if (response.error)
-					{
-						document.querySelector(".error").style.display = "block";
-						document.querySelector(".error").innerHTML = response.msg;
-					}
-					else
-						location.assign(document.referrer);
-				 })();
-			}
-			catch (e) {
-				console.error(e);
-			}
-			return false;
+		for (let pair of formData.entries())
+			body[pair[0]] = pair[1];
+
+		try {
+			(async () => {
+				const rawResponse = await fetch(endpoint, {
+					method: 'POST',
+					headers: {
+						"Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+					},
+					body: "json=" + JSON.stringify(body)
+				});
+				const response = await rawResponse.json();
+
+				if (response.error) {
+					document.querySelector(".error").style.display = "block";
+					document.querySelector(".error").innerHTML = response.msg;
+				}
+				else
+					location.assign(document.referrer);
+			})();
 		}
-	</script>
+		catch (e) {
+			console.error(e);
+		}
+		return false;
+	}
+</script>
+
 </html>

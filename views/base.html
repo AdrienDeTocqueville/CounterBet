@@ -1,46 +1,47 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		{% block title %}
-		<title>CounterBet</title>
-		{% endblock %}
-		<meta charset="utf-8" />
-		
-		<link rel="stylesheet" type="text/css" href="/css/base.css">
-		{% block link %}
-		{% endblock %}
-	</head>
-  
-	<body>
-		<header>
-			<div id="logo">
-				<a href="/"><img src="/img/logo.png" alt="CounterBet"/></a>
-				<a>Counter<strong>Bet</strong></a>
-			</div>
-			<div id="link">
-				<div id="nav-left">
-					<a class="header-link" href="/leaderboard">Leaderboard</a>
-					<a class="header-link" href="/calendar">Calendar</a>
-				</div>
-				<div id="nav-right">
-					<input type="text" placeholder="Seach CounterBet">
-					{% if _user %}
-					<a class="header-link" href="/user/{{_user.name}}">{{_user.name}}</a>
-					<a class="header-link" href="/logout">Logout</a>
-					{% else %}
-					<a class="header-link" href="/login">Sign&nbsp;in</a>
-					<a class="header-link rounded" href="/register">Sign&nbsp;up</a>
 
-					{% endif %}
-				</div>
-			</div>
-		</header>
-
-		{% block content %}
-		{% endblock %}
-	</body>
-
-	{% block script %}
+<head>
+	{% block title %}
+	<title>CounterBet</title>
 	{% endblock %}
-</html>
+	<meta charset="utf-8" />
 
+	<link rel="stylesheet" type="text/css" href="/css/base.css">
+	{% block link %}
+	{% endblock %}
+</head>
+
+<body>
+	<header>
+		<div id="logo">
+			<a href="/"><img src="/img/logo.png" alt="CounterBet" /></a>
+			<a>Counter<strong>Bet</strong></a>
+		</div>
+		<div id="link">
+			<div id="nav-left">
+				<a class="header-link" href="/leaderboard">Leaderboard</a>
+				<a class="header-link" href="/calendar">Calendar</a>
+			</div>
+			<div id="nav-right">
+				<input type="text" placeholder="Seach CounterBet">
+				{% if _user %}
+				<a class="header-link" href="/user/{{_user.name}}">{{_user.name}}</a>
+				<a class="header-link" href="/logout">Logout</a>
+				{% else %}
+				<a class="header-link" href="/login">Sign&nbsp;in</a>
+				<a class="header-link rounded" href="/register">Sign&nbsp;up</a>
+
+				{% endif %}
+			</div>
+		</div>
+	</header>
+
+	{% block content %}
+	{% endblock %}
+</body>
+
+{% block script %}
+{% endblock %}
+
+</html>

@@ -8,7 +8,7 @@
 
 {% block content %}
 <main id="index-main">
-	
+
 	<div id="left">
 		<h1>Leaderboards</h1>
 		<br>
@@ -18,17 +18,17 @@
 				<header class="title">Users</header>
 				<main>
 					{% for user in users %}
-						<div class="matchup">
-							<div class="c30">
-								N°{{user.rank}}
-							</div>
-							<div class="c40">
-								{{user.name}}
-							</div>
-							<div class="c30">
-								{{user.points}} pt
-							</div>
+					<div class="matchup">
+						<div class="c30">
+							N°{{user.rank}}
 						</div>
+						<div class="c40">
+							{{user.name}}
+						</div>
+						<div class="c30">
+							{{user.points}} pt
+						</div>
+					</div>
 					{% endfor %}
 					<br>
 				</main>
@@ -40,19 +40,19 @@
 				<header class="title">Teams</header>
 				<main>
 					{% for team in teams %}
-						<a href="/team/{{match.team.id}}">
-							<div class="matchup">
-								<div class="c20">
-									N°{{team.rank}}
-								</div>
-								<div class="c60">
-									{{team.name}}
-								</div>
-								<div class="c20">
-									.{{pannels.team_icon(team)}}
-								</div>
+					<a href="/team/{{match.team.id}}">
+						<div class="matchup">
+							<div class="c20">
+								N°{{team.rank}}
 							</div>
-						</a>
+							<div class="c60">
+								{{team.name}}
+							</div>
+							<div class="c20">
+								{{pannels.team_icon(team)}}
+							</div>
+						</div>
+					</a>
 					{% endfor %}
 					<br>
 				</main>
@@ -64,26 +64,26 @@
 		<br>
 
 		{% for match in matches %}
+
 		<div class="pannel">
-				<a href="/match/{{match.id}}">
-					{{ pannels.match_header(match, date) }}
-					<main>
-						<a href="/match/{{match.id}}">
+			<a href="/match/{{match.id}}">
+				{{ pannels.match_header(match, date) }}
+				<main>
+					<a href="/match/{{match.id}}">
 						<div class="matchup">
 							<div class="c40">
-							{{ pannels.match_content(match.team1) }}
+								{{ pannels.match_content(match.team1) }}
 							</div>
 							<div class="c20">
-							VS
+								{{match.format}}
 							</div>
 							<div class="c40">
-							{{ pannels.match_content(match.team2) }}
+								{{ pannels.match_content(match.team2) }}
 							</div>
-						</div> 
-					</main>
-				</div>
-			</a>
-			<br>
+						</div>
+				</main>
+		</div></a>
+		<br>
 		{% endfor %}
 	</div>
 
