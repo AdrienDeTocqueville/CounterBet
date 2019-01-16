@@ -98,6 +98,7 @@ db.connect().then(() => {
 	.post('/login', async function (req, res) {
 		let response = await db.login(req);
 		res.end(JSON.stringify(response));
+		db.checkMatches();
 	})
 	.post('/register', async function (req, res) {
 		let response = await db.register(req.body);

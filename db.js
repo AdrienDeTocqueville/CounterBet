@@ -317,6 +317,7 @@ async function removeBet(username, matchId) {
 	});
 }
 
+
 async function checkMatches() {
 	let test = await db.collection("matches").find({ winner: null }).toArray();
 	var date = new Date();
@@ -324,32 +325,44 @@ async function checkMatches() {
 	for (i = 0; i < test.length; i++) {
 		if (date > test[i].date) {
 			tab.push(test[i].id);
-		}
-	}
-	console.log(updateMatches(tab));
-
-}
-
-async function checkpoint(username) {
-	let test = await db.collection("users").findOne({ username: username });
-	let bet = test.bets;
-	let idbet = [];
-	let teambet = [];
-	let point=test.point;
-	for (i = 0; i < bet.length; i++) {
-		idbet.push(bet[i].id);
-		teambet.push(bet[i].team);
-		let match = await db.collection("matches").findOne({ id: idbet[i] });
-		let ggmatche = match.winner;
-		if (ggmatche != null && ggmatche.name == teambet[i]) {
-			let newpoint = point +  parseInt(bet[i].num) ;
-			db.collection("users").updateOne({ username : username }, {$set: { point : newpoint }});
-		} else {
-			console.log("not gg");
 			
 		}
 	}
+	updateMatches(tab);
+	for (i = 0; i < tab.length; i++) {
+		let update = await db.collection("users").find({ bets : { $elemMatch : { id : tab[i]} } } ).toArray();
+		if ( update.length !=  0){
+			for (j=0; j < update.length; j++){
+				checkpoint(update[j].name, 2329838);
+			}
+		}
+	}
 }
+
+async function checkpoint(username, match) {
+	let test = await db.collection("users").findOne({ name : username });
+	let bet = test.bets;
+	let idbet = [];
+	let teambet = [];
+	let points=test.points;
+	for (i = 0; i < bet.length; i++) {
+		idbet.push(bet[i].id);
+		teambet.push(bet[i].team);
+		let listmatch = await db.collection("matches").findOne({ id: match });
+		let ggmatche = listmatch.winner;
+		console.log(ggmatche);
+		if (ggmatche != null && ggmatche.name == teambet[i]) {
+			let newpoint = points +  parseInt(bet[i].num) ;
+			db.collection("users").updateOne({ name : username }, {$set: { points : newpoint }});
+			console.log("gg");
+		} else {
+			console.log("not gg");
+		}
+	}
+}
+
+
+
 
 
 
