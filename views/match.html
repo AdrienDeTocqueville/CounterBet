@@ -19,11 +19,13 @@
 			{{ pannels.match_header(match, date) }}
 			<main>
 				<div class="matchup">
-					<a href="/team/{{match.team1.id}}">
+					<a href="/team/{{match.team1.id}}" class="c40">
 						{{ pannels.match_content(match.team1) }}
 					</a>
-					<p>VS</p>
-					<a href="/team/{{match.team2.id}}">
+					<div class="c20">
+						{{match.format}}
+					</div>
+					<a href="/team/{{match.team2.id}}" class="c40">
 						{{ pannels.match_content(match.team2) }}
 					</a>
 				</div>
