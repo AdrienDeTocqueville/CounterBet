@@ -1,6 +1,7 @@
 const mongo = require("mongodb").MongoClient;
 const { HLTV } = require("hltv");
 const crypto = require("crypto");
+const url = require('url');
 
 let db = null;
 
@@ -14,9 +15,7 @@ function parse_match(id, raw) {
 		team2: raw.team2,
 		winner: raw.winnerTeam,
 
-		date: raw.date,
-		live: raw.live,
-		streams: raw.streams
+		date: raw.date
 	};
 
 	if (match.winner && raw.maps) {
@@ -36,18 +35,30 @@ function parse_match(id, raw) {
 		match.score = (raw.maps.length == 1) ? score : wins;
 	}
 
+	if (raw.streams) {
+		for (s of raw.streams) {
+			if (url.parse(s.link).host == 'player.twitch.tv') {
+				match.streamURL = s.link;
+				break;
+			}
+		}
+	}
+
 	match.cote = 1;
 
 	return match;
 }
 
-async function updateMatches(ids) {
+async function updateMatches(ids, fetchBets) {
 	let updates = [];
 	let collec = db.collection("matches");
 
-	for (id of ids) {
+	for (let id of ids) {
 		let newVal = await downloadMatch(id, false);
 		updates.push(collec.updateOne({ id }, { $set: newVal }, { upsert: true }));
+		if (fetchBets && newVal.winner) {
+			updatePoints(id);
+		}
 	}
 	return Promise.all(updates);
 }
@@ -105,11 +116,21 @@ async function downloadTeam(id, insert) {
 }
 
 function getUpcomingMatches(max) {
+	let live = { date: { $lt: Date.now() }, winner: null };
+	let upcoming = { date: { $gte: Date.now() } };
+
 	return db.collection("matches")
-		.find({ $or: [{ date: { $gt: Date.now() } }, { live: true }] })
+		.find({ $or: [live, upcoming] })
 		.sort({ date: 1 })
 		.limit(max || 10)
-		.toArray();
+		.toArray()
+		.then(matches => {
+			for (let m of matches) {
+				if (m.date < Date.now() && m.winner == null)
+					m.live = true;
+			}
+			return matches;
+		});
 }
 
 function getLeaderboard(max) {
@@ -156,7 +177,11 @@ async function getMatch(id) {
 	if (isNaN(id = parseInt(id)))
 		return null;
 	let match = await db.collection("matches").findOne({ id });
-	return match || downloadMatch(id);
+	if (!match)
+		match = await downloadMatch(id);
+	if (match.date < Date.now() && match.winner == null)
+		match.live = true;
+	return match;
 }
 
 async function getTeam(id) {
@@ -179,8 +204,8 @@ function getBet(username, matchId) {
 			}
 		}
 	}, {
-			projection: { "bets.$": 1 }
-		});
+		projection: { "bets.$": 1 }
+	});
 }
 
 
@@ -201,36 +226,41 @@ async function connect(url, refreshTime) {
 		return null;
 	}
 
-	//updateDB();
+	updateDB();
 	//setInterval(updateDB, refreshTime);
 
 	return client;
 }
 
-function updateDB() {
+async function updateDB() {
 	console.log("\x1b[33mUpdating database\x1b[0m");
 
-	let live = db.collection("matches").find({ live: true }).toArray();
-	let upcoming = HLTV.getMatches().then(matches => {
-		let liveM = matches.filter(m => m.live);
-		let others = matches.filter(m => !m.live);
-		// Sort twice because otherwise it doesn't work
-		others = others.sort((a, b) => {
-			return (a - b);
+	// upcoming matches
+	let downloaded = await HLTV.getMatches().
+		then(matches => {
+			matches = matches.sort((a, b) => {
+				return (a.date - b.date);
+			}).slice(0, 10);
+			matches = matches.map(m => m.id);
+			updateMatches(matches).catch(e => {
+				console.log("\x1b[31mFailed to update matches\x1b[0m");
+				console.log(e);
+			});
+			return matches;
 		});
-		others = others.sort((a, b) => {
-			return (a - b);
-		});
-		return liveM.concat(others.slice(0, 10 - liveM.length));
-	});
 
-	Promise.all([live, upcoming]).then((values) => {
-		values = values[0].map(x => x.id).concat(values[1].map(x => x.id));
-		updateMatches(values).catch(e => {
-			console.log("\x1b[31mFailed to update matches\x1b[0m");
-			console.log(e);
+	// finished matches
+	await db.collection("matches")
+		.find({ winner: null, date: { $lt: Date.now() } }).toArray()
+		.then(matches => {
+			matches = matches.map(m => m.id);
+			matches = matches.filter(m => downloaded.indexOf(m) == -1);
+
+			updateMatches(matches, true).catch(e => {
+				console.log("\x1b[31mFailed to update matches\x1b[0m");
+				console.log(e);
+			});
 		});
-	})
 }
 
 function hashPassword(pass) {
@@ -317,41 +347,9 @@ async function removeBet(username, matchId) {
 	});
 }
 
-async function checkMatches() {
-	let test = await db.collection("matches").find({ winner: null }).toArray();
-	var date = new Date();
-	var tab = [];
-	for (i = 0; i < test.length; i++) {
-		if (date > test[i].date) {
-			tab.push(test[i].id);
-		}
-	}
-	console.log(updateMatches(tab));
-
+async function updatePoints(match) {
+	console.log('Update bets', match);
 }
-
-async function checkpoint(username) {
-	let test = await db.collection("users").findOne({ username: username });
-	let bet = test.bets;
-	let idbet = [];
-	let teambet = [];
-	let point=test.point;
-	for (i = 0; i < bet.length; i++) {
-		idbet.push(bet[i].id);
-		teambet.push(bet[i].team);
-		let match = await db.collection("matches").findOne({ id: idbet[i] });
-		let ggmatche = match.winner;
-		if (ggmatche != null && ggmatche.name == teambet[i]) {
-			let newpoint = point +  parseInt(bet[i].num) ;
-			db.collection("users").updateOne({ username : username }, {$set: { point : newpoint }});
-		} else {
-			console.log("not gg");
-			
-		}
-	}
-}
-
-
 
 module.exports = {
 	getUpcomingMatches,
@@ -369,8 +367,5 @@ module.exports = {
 	addBet,
 	removeBet,
 
-	connect,
-
-	checkMatches,
-	checkpoint
+	connect
 };

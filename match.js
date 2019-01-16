@@ -1,13 +1,4 @@
-const url = require('url');
 const db = require("./db.js");
-
-function getStreamUrl(match) {
-	for (s of match.streams) {
-		if (url.parse(s.link).host == 'player.twitch.tv')
-			return s.link;
-	}
-	return null;
-}
 
 async function getMatch(req) {
 	let user = req.session.username;
@@ -15,10 +6,6 @@ async function getMatch(req) {
 
 	if (match)
 	{
-		// Stream
-		match.streamURL = getStreamUrl(match);
-		match.streams = undefined;
-
 		if (!match.team1 || !match.team2)
 			return;
 
