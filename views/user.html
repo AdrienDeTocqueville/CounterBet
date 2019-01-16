@@ -21,8 +21,10 @@
 
 		<h1>Your Bets</h1>
 		{% for bet in user.bets %}
-		{{ bet | dump }}
+		{{ bet | dump('\t') }}
+
 		<h2>Incoming</h2>
+		{%if not match.score%}
 		<div class="pannel">
 			<a href="/match/{{ bet.match.id }}">
 				{{ pannels.match_header(bet.match, date) }}
@@ -34,37 +36,63 @@
 							</div>
 							<div class="c20">
 								{{ bet.match.format }}
-							</div>	
+							</div>
 							<div class="c40">
 								{{ bet.match.team2.name }}
 							</div>
 						</div>
 						<div class="matchup">
-							<div class="c40">
+							<div class="c60">
 								You bet {{bet.num}}pt on {{bet.team}}
 							</div>
 							<div class="c20">
-								a
+								cote : {{bet.match.cote}}
 							</div>
-							<div class="c40">
-								b
+							<div class="c20">
+
 							</div>
 						</div>
 				</main>
 		</div></a>
-
-		<h2>Finished</h2>
-
-		{% if bet.info == 1 %}
-		<h4>Gagné</h4>
-		<span class="label label.default">{{bet.point}} points </span>
-		{% else %}
-		<h4>Perdu</h4>
-		<span class="label label.default">0 points </span>
 		{% endif %}
-
 		{% endfor %}
 
+		<br>
+
+		<h2>Finished</h2>
+		{% for bet in user.bets %}
+		{%if match.score%}
+		<div class="pannel">
+			<a href="/match/{{ bet.match.id }}">
+				{{ pannels.match_header(bet.match, date) }}
+				<main>
+					<a href="/match/{{ bet.match.id }}">
+						<div class="matchup">
+							<div class="c40">
+								{{ bet.match.team1.name }}
+							</div>
+							<div class="c20">
+								{{ bet.match.format }}
+							</div>
+							<div class="c40">
+								{{ bet.match.team2.name }}
+							</div>
+						</div>
+						<div class="matchup">
+							<div class="c60">
+								You bet {{bet.num}}pt on {{bet.team}}
+							</div>
+							<div class="c20">
+								result : {{ bet.gain }}
+							</div>
+							<div class="c20">
+								
+							</div>
+						</div>
+				</main>
+		</div></a>
+		{% endif %}
+		{% endfor %}
 	</div>
 
 
