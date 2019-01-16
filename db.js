@@ -258,7 +258,7 @@ async function updateDB() {
 
 			updateMatches(matches, true).catch(e => {
 				console.log("\x1b[31mFailed to update matches\x1b[0m");
-				console.log(e);
+				console.log("matche fini" + e);
 			});
 		});
 }
@@ -347,7 +347,7 @@ async function removeBet(username, matchId) {
 	});
 }
 
-
+/*
 async function checkMatches() {
 	let test = await db.collection("matches").find({ winner: null }).toArray();
 	var date = new Date();
@@ -368,19 +368,19 @@ async function checkMatches() {
 		}
 	}
 }
-
+*/
 async function checkpoint(username, match) {
+	
 	let test = await db.collection("users").findOne({ name : username });
 	let bet = test.bets;
 	let idbet = [];
 	let teambet = [];
 	let points=test.points;
-	for (i = 0; i < bet.length; i++) {
+	for ( let i = 0; i < bet.length; i++) {
 		idbet.push(bet[i].id);
 		teambet.push(bet[i].team);
 		let listmatch = await db.collection("matches").findOne({ id: match });
 		let ggmatche = listmatch.winner;
-		console.log(ggmatche);
 		if (ggmatche != null && ggmatche.name == teambet[i]) {
 			let newpoint = points +  parseInt(bet[i].num) ;
 			db.collection("users").updateOne({ name : username }, {$set: { points : newpoint }});
@@ -389,6 +389,7 @@ async function checkpoint(username, match) {
 			console.log("not gg");
 		}
 	}
+	
 }
 
 
@@ -397,6 +398,12 @@ async function checkpoint(username, match) {
 
 
 async function updatePoints(match) {
+	let update = await db.collection("users").find({ bets : { $elemMatch : { id : match } } } ).toArray();
+		if ( update.length !=  0){
+			for (j=0; j < update.length; j++){
+				await checkpoint(update[j].name, match);
+			}
+		}
 	console.log('Update bets', match);
 }
 
