@@ -4,8 +4,9 @@
 {% block content %}
 
 <h1> Utilisateur </h1>
-<p style="white-space:pre-wrap;"> {{  user | dump('\t') }} </p>
-
+<br>Name : {{ user.name }}
+<br>Email : {{user.email}}
+<br>Total points : {{ user.points }}
 
 <h1> Vos Paris</h1>
 {% for bet in user.bets %}
