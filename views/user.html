@@ -24,7 +24,7 @@
 		{% for bet in user.bets %}
 		{{ bet | dump('\t') }}
 
-		{%if not match.score%}
+		{%if not bet.match.score%}
 		<div class="pannel">
 			<a href="/match/{{ bet.match.id }}">
 				{{ pannels.match_header(bet.match, date) }}
@@ -61,7 +61,7 @@
 
 		<h2>Finished</h2>
 		{% for bet in user.bets %}
-		{%if match.score%}
+		{%if bet.match.score%}
 		<div class="pannel">
 			<a href="/match/{{ bet.match.id }}">
 				{{ pannels.match_header(bet.match, date) }}
