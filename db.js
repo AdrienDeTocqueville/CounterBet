@@ -122,7 +122,7 @@ function getLeaderboard(max) {
 
 function getBestTeams(max) {
 	return db.collection("teams")
-		.find({ rank: {$ne: null} }, {projection: {name: 1, rank: 1}})
+		.find({ rank: {$ne: null} }, {projection: {name: 1, rank: 1, id: 1}})
 		.sort({ rank: 1 })
 		.limit(max || 10)
 		.toArray();
