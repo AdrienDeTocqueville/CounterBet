@@ -7,94 +7,103 @@
 {% endblock %}
 
 {% block content %}
-<main id="index-main">
-
-	<div id="left">
-
-		<h1> Utilisateur </h1>
-		<br>Name : {{ user.name }}
-		<br>Email : {{user.email}}
-		<br>Total points : {{ user.points }}
-
-	</div>
-	<div id="right">
-
-		<h1>Your Bets</h1>
-		<h2>Incoming</h2>
-		{% for bet in user.bets %}
-		{{ bet | dump('\t') }}
-
-		{%if not bet.match.score%}
-		<div class="pannel">
-			<a href="/match/{{ bet.match.id }}">
-				{{ pannels.match_header(bet.match, date) }}
-				<main>
-					<a href="/match/{{ bet.match.id }}">
-						<div class="matchup">
-							<div class="c40">
-								{{ bet.match.team1.name }}
-							</div>
-							<div class="c20">
-								{{ bet.match.format }}
-							</div>
-							<div class="c40">
-								{{ bet.match.team2.name }}
-							</div>
-						</div>
-						<div class="matchup">
-							<div class="c60">
-								You bet {{bet.num}}pt on {{bet.team}}
-							</div>
-							<div class="c20">
-								cote : {{bet.match.cote}}
-							</div>
-							<div class="c20">
-
-							</div>
-						</div>
-				</main>
-		</div></a>
-		{% endif %}
-		{% endfor %}
-
-		<br>
-
-		<h2>Finished</h2>
-		{% for bet in user.bets %}
-		{%if bet.match.score%}
-		<div class="pannel">
-			<a href="/match/{{ bet.match.id }}">
-				{{ pannels.match_header(bet.match, date) }}
-				<main>
-					<a href="/match/{{ bet.match.id }}">
-						<div class="matchup">
-							<div class="c40">
-								{{ bet.match.team1.name }}
-							</div>
-							<div class="c20">
-								{{ bet.match.format }}
-							</div>
-							<div class="c40">
-								{{ bet.match.team2.name }}
-							</div>
-						</div>
-						<div class="matchup">
-							<div class="c60">
-								You bet {{bet.num}}pt on {{bet.team}}
-							</div>
-							<div class="c20">
-								result : {{ bet.gain }}
-							</div>
-							<div class="c20">
-								
-							</div>
-						</div>
-				</main>
-		</div></a>
-		{% endif %}
-		{% endfor %}
+<main>
+	<h2>Utilisateur</h2>
+	<div class="matchup">
+		<div class="c20">
+			Name : {{ user.name }}
+		</div>
+		<div class="c20">
+			Email : {{user.email}}
+		</div>
+		<div class="c20">
+			Total points : {{ user.points }}
+		</div>
 	</div>
 
+	<h1>Your Bets</h1>
+	<div id="index-main">
+		<div id="left">
 
 
-	{% endblock %}
+			<h2>Incoming</h2>
+			{% for bet in user.bets %}
+			{{ bet | dump('\t') }}
+
+			{%if not bet.match.score%}
+			<div class="pannel">
+				<a href="/match/{{ bet.match.id }}">
+					{{ pannels.match_header(bet.match, date) }}
+					<main>
+						<a href="/match/{{ bet.match.id }}">
+							<div class="matchup">
+								<div class="c40">
+									{{ bet.match.team1.name }}
+								</div>
+								<div class="c20">
+									{{ bet.match.format }}
+								</div>
+								<div class="c40">
+									{{ bet.match.team2.name }}
+								</div>
+							</div>
+							<div class="matchup">
+								<div class="c60">
+									You bet {{bet.num}}pt on {{bet.team}}
+								</div>
+								<div class="c20">
+									cote : {{bet.match.cote}}
+								</div>
+								<div class="c20">
+
+								</div>
+							</div>
+					</main>
+			</div></a>
+			<br>
+			{% endif %}
+			{% endfor %}
+
+		</div>
+		<div id="right">
+
+			<h2>Finished</h2>
+			{% for bet in user.bets %}
+			{%if bet.match.score%}
+			<div class="pannel">
+				<a href="/match/{{ bet.match.id }}">
+					{{ pannels.match_header(bet.match, date) }}
+					<main>
+						<a href="/match/{{ bet.match.id }}">
+							<div class="matchup">
+								<div class="c40">
+									{{ bet.match.team1.name }}
+								</div>
+								<div class="c20">
+									{{ bet.match.format }}
+								</div>
+								<div class="c40">
+									{{ bet.match.team2.name }}
+								</div>
+							</div>
+							<div class="matchup">
+								<div class="c60">
+									You bet {{ bet.num }}pt on {{ bet.team }}
+								</div>
+								<div class="c20">
+									result : {{ bet.gain }}
+								</div>
+								<div class="c20">
+
+								</div>
+							</div>
+					</main>
+			</div></a>
+			<br>
+			{% endif %}
+			{% endfor %}
+		</div>
+
+
+
+		{% endblock %}
