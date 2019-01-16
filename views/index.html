@@ -15,22 +15,46 @@
 
 		<div id="users">
 			<div class="pannel">
-				<header class="title"> Users </header>
+				<header class="title">Users</header>
 				<main>
 					{% for user in users %}
-					<div>#{{user.rank}}. {{user.name}} with {{user.points}} points</div>
+						<div class="matchup">
+							<div class="c30">
+								N°{{user.rank}}
+							</div>
+							<div class="c40">
+								{{user.name}}
+							</div>
+							<div class="c30">
+								{{user.points}} pt
+							</div>
+						</div>
 					{% endfor %}
+					<br>
 				</main>
 			</div>
 		</div>
 		<br>
 		<div id="teams">
 			<div class="pannel">
-				<header class="title"> Teams </header>
+				<header class="title">Teams</header>
 				<main>
 					{% for team in teams %}
-					<div>#{{team.rank}}. {{team.name}}</div>
+						<a href="/team/{{match.team.id}}">
+							<div class="matchup">
+								<div class="c20">
+									N°{{team.rank}}
+								</div>
+								<div class="c60">
+									{{team.name}}
+								</div>
+								<div class="c20">
+									.{{pannels.team_icon(team)}}
+								</div>
+							</div>
+						</a>
 					{% endfor %}
+					<br>
 				</main>
 			</div>
 		</div>
