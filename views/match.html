@@ -56,7 +56,7 @@
 			</main>
 		</div>
 
-		{% if match.winner == null and match.live == false %}
+		{% if match.winner == null and not match.live %}
 		<button onclick="bet({{match.id}})">Make a bet !</button>
 		<br>
 		<br>
@@ -114,7 +114,7 @@
 
 
 		<a href="/tournament/{{match.tournament.id}}">Tournament: {{match.tournament.name}}</a>
-		<p style="white-space:pre-wrap;"> {{ {title:match.title, bet: match.bet, winner: match.winner, score: match.score, cote: match.cote, format: match.format } | dump('\t') }} </p>
+		<p style="white-space:pre-wrap;"> {{ match | dump('\t') }} </p>
 	</div>
 
 
