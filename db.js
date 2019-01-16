@@ -226,7 +226,7 @@ async function connect(url, refreshTime) {
 		return null;
 	}
 
-	updateDB();
+	//updateDB();
 	//setInterval(updateDB, refreshTime);
 
 	return client;
