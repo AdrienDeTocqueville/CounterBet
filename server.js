@@ -76,7 +76,7 @@ db.connect().then(() => {
 		})
 		.get('/user/:name', async function (req, res) {
 			let user = await userUtils.getUser(req.params.name);
-			try_goto(user, res, req, 'user.html', { user });
+			try_goto(user, res, req, 'user.html', { user, date: time.toString });
 		})
 		.get('/leaderboard', async function (req, res) {
 			let users = await db.getLeaderboard(10);

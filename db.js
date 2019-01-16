@@ -226,7 +226,7 @@ async function connect(url, refreshTime) {
 		return null;
 	}
 
-	//updateDB();
+	updateDB();
 	//setInterval(updateDB, refreshTime);
 
 	return client;
@@ -347,28 +347,7 @@ async function removeBet(username, matchId) {
 	});
 }
 
-/*
-async function checkMatches() {
-	let test = await db.collection("matches").find({ winner: null }).toArray();
-	var date = new Date();
-	var tab = [];
-	for (i = 0; i < test.length; i++) {
-		if (date > test[i].date) {
-			tab.push(test[i].id);
-			
-		}
-	}
-	updateMatches(tab);
-	for (i = 0; i < tab.length; i++) {
-		let update = await db.collection("users").find({ bets : { $elemMatch : { id : tab[i]} } } ).toArray();
-		if ( update.length !=  0){
-			for (j=0; j < update.length; j++){
-				checkpoint(update[j].name, 2329838);
-			}
-		}
-	}
-}
-*/
+
 async function checkpoint(username, match) {
 	
 	let test = await db.collection("users").findOne({ name : username });
@@ -384,6 +363,7 @@ async function checkpoint(username, match) {
 		if (ggmatche != null && ggmatche.name == teambet[i]) {
 			let newpoint = points +  parseInt(bet[i].num) ;
 			db.collection("users").updateOne({ name : username }, {$set: { points : newpoint }});
+			db.collection('users').updateOne( { name : username , "bets.id" : match }, {$set : {"bets.$.gain" : parseInt(bet[i].num) } } )
 			console.log("gg");
 		} else {
 			console.log("not gg");
