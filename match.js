@@ -31,7 +31,7 @@ async function getMatch(req) {
 					let temp = m.team2;
 					m.team2 = m.team1;
 					m.team1 = temp;
-					//m.score.reverse();
+					m.score.reverse();
 				}
 			})
 			return hist;

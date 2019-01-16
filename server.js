@@ -78,7 +78,9 @@ db.connect().then(() => {
 		try_goto(user, res, req, 'user.html', { user });
 	})
 	.get('/leaderboard', async function (req, res) {
-		do_goto(res, req, 'leaderboard.html');
+		let users = await db.getLeaderboard(10);
+		let teams = await db.getBestTeams(10);
+		do_goto(res, req, 'leaderboard.html', { users, teams });
 	})
 	.get('/calendar', async function (req, res) {
 		do_goto(res, req, 'calendar.html');
