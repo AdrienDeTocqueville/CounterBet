@@ -6,9 +6,17 @@
 	<p>{{date(match.date)}}</p>
 	{% endif %}
 
-	<p> <a href="/tournament/{{match.tournament.id}}">
+	{% if match.score %}
+	<p>
+		{match.score}
+	</p>
+	{% endif %}
+
+	<p>
+		<a href="/tournament/{{match.tournament.id}}">
 			{{match.tournament.name}}
-		</a></p>
+		</a>
+	</p>
 
 </header>
 {% endmacro %}
