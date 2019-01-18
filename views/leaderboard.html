@@ -15,17 +15,19 @@
 				<header class="title">Users</header>
 				<main>
 					{% for user in users %}
-					<div class="matchup">
-						<div class="c30">
-							N°{{user.rank}}
+					<a href="/user/{{user.name}}">
+						<div class="matchup">
+							<div class="c30">
+								N°{{user.rank}}
+							</div>
+							<div class="c40">
+								{{user.name}}
+							</div>
+							<div class="c30">
+								{{user.points}} pt
+							</div>
 						</div>
-						<div class="c40">
-							{{user.name}}
-						</div>
-						<div class="c30">
-							{{user.points}} pt
-						</div>
-					</div>
+					</a>
 					{% endfor %}
 					<br>
 				</main>

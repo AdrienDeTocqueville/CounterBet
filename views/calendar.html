@@ -9,13 +9,39 @@
 {% block content %}
 <main id="index-main">
 
-	<h1> Calendar </h1>
 	<div id="left">
+		<h2>Recent Result</h2>
+		<br>
+		{% for match in matches %}
 
+		{% if not match.winner == null %}
+		<div class="pannel">
+			<a href="/match/{{match.id}}">
+				{{ pannels.match_header(match, date) }}
+				<main>
+					<a href="/match/{{match.id}}">
+						<div class="matchup">
+							<div class="c40">
+								{{ pannels.match_content(match.team1) }}
+							</div>
+							<div class="c20">
+								{{match.format}}
+								<br> {{match.winner}} won
+							</div>
+							<div class="c40">
+								{{ pannels.match_content(match.team2) }}
+							</div>
+						</div>
+				</main>
+		</div>
+		</a>
+		<br>
+		{% endif %}
+		{% endfor %}
 	</div>
 
 	<div id="right">
-		<h1>Upcoming matches</h1>
+		<h2>Upcoming matches</h2>
 		<br>
 
 		{% for match in matches %}
@@ -41,7 +67,6 @@
 		<br>
 		{% endfor %}
 	</div>
-
 
 </main>
 {% endblock %}

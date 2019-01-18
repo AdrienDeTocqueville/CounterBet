@@ -37,7 +37,7 @@
 	margin: 0 10px 0 10px;
 }
 
-.pannel > main
+.pannel main
 {
 	padding-top: 15px;
 	background-color: #fefefe;
@@ -87,7 +87,7 @@
 	text-align: center;
 }
 
-.team> img
+.team > img
 {
 	display: block;
 	margin: 0 auto;
