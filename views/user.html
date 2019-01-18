@@ -31,9 +31,11 @@
 				<div class="c20">
 					rating : {{bet.match.cote}}
 				</div>
+				{%if bet.gain %}
 				<div class="c40">
 					result: {{bet.gain}}pt
 				</div>
+				{% endif %}
 			</div>
 			<br>
 		</main>
