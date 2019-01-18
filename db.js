@@ -377,6 +377,9 @@ async function checkpoint(username, match) {
 			db.collection('users').updateOne( { name : username , "bets.id" : match }, {$set : {"bets.$.gain" : parseInt(bet[i].num) } } )
 			console.log("gg");
 		} else {
+			let newpoint = points -  parseInt(bet[i].num) ;
+			db.collection("users").updateOne({ name : username }, {$set: { points : newpoint }});
+			db.collection('users').updateOne( { name : username , "bets.id" : match }, {$set : {"bets.$.gain" : parseInt(-bet[i].num) } } )
 			console.log("not gg");
 		}
 	}
