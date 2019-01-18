@@ -79,12 +79,15 @@
 			{% if match.history and match.history.length %}
 			{% for prev_match in match.history %}
 			<div class="prev_match">
-				<i>{{date(prev_match.date)}}</i>
-				-
-				<strong>{{prev_match.team1.name}}</strong>
-				VS
-				<strong>{{prev_match.team2.name}}</strong>
-				{{prev_match.score[0]}} - {{prev_match.score[1]}}
+				<div class="c40">
+					<i>{{date(prev_match.date)}}</i>
+				</div>
+				<div class="c20">
+					<strong>{{prev_match.team1.name}}</strong> {{prev_match.score[0]}}
+				</div>
+				<div class="c20">
+					{{prev_match.score[1]}} <strong>{{prev_match.team2.name}}</strong>
+				</div>
 			</div>
 			{% endfor %}
 			{% else %}
