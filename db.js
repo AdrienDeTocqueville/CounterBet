@@ -57,7 +57,7 @@ async function updateMatches(ids, fetchBets) {
 		let newVal = await downloadMatch(id, false);
 		updates.push(collec.updateOne({ id }, { $set: newVal }, { upsert: true }));
 		if (fetchBets && newVal.winner) {
-			updatePoints(id);
+			await updatePoints(id);
 		}
 	}
 	return Promise.all(updates);
@@ -360,30 +360,40 @@ async function removeBet(username, matchId) {
 
 
 async function checkpoint(username, match) {
-	
 	let test = await db.collection("users").findOne({ name : username });
 	let bet = test.bets;
-	let idbet = [];
+	let betnum = [];
 	let teambet = [];
-	let points=test.points;
 	for ( let i = 0; i < bet.length; i++) {
-		idbet.push(bet[i].id);
+		betnum.push(bet[i].num);
 		teambet.push(bet[i].team);
-		let listmatch = await db.collection("matches").findOne({ id: match });
-		let ggmatche = listmatch.winner;
-		if (ggmatche != null && ggmatche.name == teambet[i]) {
-			let newpoint = points +  parseInt(bet[i].num) ;
+	}
+	let listmatch = await db.collection("matches").findOne({ id: match });
+
+	let ggmatche = listmatch.winner;
+	if(ggmatche != null && ggmatche.name == listmatch.team1.name){
+		teamlost= listmatch.team2.name;
+	} else{
+		teamlost=listmatch.team1.name;
+	}
+	for (let j=0; j <teambet.length; j++){
+		if (ggmatche != null && ggmatche.name == teambet[j]) {
+			let points=test.points;
+			let newpoint = points +  parseInt(betnum[j]) ;
 			db.collection("users").updateOne({ name : username }, {$set: { points : newpoint }});
-			db.collection('users').updateOne( { name : username , "bets.id" : match }, {$set : {"bets.$.gain" : parseInt(bet[i].num) } } )
+			db.collection('users').updateOne( { name : username , "bets.id" : match }, {$set : {"bets.$.gain" : parseInt(betnum[j]) } } )
 			console.log("gg");
-		} else {
-			let newpoint = points -  parseInt(bet[i].num) ;
+			break;
+		} else  if (ggmatche != null && teamlost == teambet[j] ){
+			let points=test.points;
+			let newpoint = points -  parseInt(betnum[j]) ;
 			db.collection("users").updateOne({ name : username }, {$set: { points : newpoint }});
-			db.collection('users').updateOne( { name : username , "bets.id" : match }, {$set : {"bets.$.gain" : parseInt(-bet[i].num) } } )
-			console.log("not gg");
+			db.collection('users').updateOne( { name : username , "bets.id" : match }, {$set : {"bets.$.gain" :-betnum[j] } } )
+			console.log("not gg" );
+			break;
 		}
 	}
-	
+	// 1 + (0.4 + (0.5 - cote)/ 1.2) équipe 2 
 }
 
 async function updatePoints(match) {
