@@ -227,9 +227,20 @@ async function connect(url, refreshTime) {
 	}
 
 	updateDB();
-	//setInterval(updateDB, refreshTime);
+	setInterval(updateDB, refreshTime);
 
 	return client;
+}
+
+async function init() {
+	let ranking = await HLTV.getTeamRanking();
+	let teams = [];
+
+	for (let team of ranking) {
+		teams.push(getTeam(team.team.id));
+	}
+
+	return Promise.all(teams);
 }
 
 async function updateDB() {
@@ -372,11 +383,6 @@ async function checkpoint(username, match) {
 	
 }
 
-
-
-
-
-
 async function updatePoints(match) {
 	let update = await db.collection("users").find({ bets : { $elemMatch : { id : match } } } ).toArray();
 		if ( update.length !=  0){
@@ -403,5 +409,6 @@ module.exports = {
 	addBet,
 	removeBet,
 
-	connect
+	connect,
+	init
 };
