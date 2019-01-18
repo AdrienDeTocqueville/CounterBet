@@ -40,19 +40,17 @@
 				<header class="title">Teams</header>
 				<main>
 					{% for team in teams %}
-					<a href="/team/{{match.team.id}}">
-						<div class="matchup">
-							<div class="c20">
-								N°{{team.rank}}
-							</div>
-							<div class="c60">
-								{{team.name}}
-							</div>
-							<div class="c20">
-								{{pannels.team_icon(team)}}
-							</div>
+					<div class="matchup">
+						<div class="c20">
+							N°{{team.rank}}
 						</div>
-					</a>
+						<div class="c60">
+							{{team.name}}
+						</div>
+						<div class="c20">
+							{{pannels.team_icon(team)}}
+						</div>
+					</div>
 					{% endfor %}
 					<br>
 				</main>
