@@ -7,8 +7,8 @@
 	padding: 1em;
 }
 
-#left, #right {
-	width: 500px;
+#left, #right, .right {
+	min-width: 500px;
 }
 
 .live {

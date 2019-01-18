@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/AdriendeTocqueville/counterbet#readme",
   "dependencies": {
+    "bootstrap": "^3.4.0",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "hltv": "^2.9.1",
