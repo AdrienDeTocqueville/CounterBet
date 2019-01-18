@@ -5,7 +5,9 @@ const url = require('url');
 
 let db = null;
 
-function parse_match(id, raw) {
+async function parse_match(id, raw) {
+	raw = await raw;
+
 	let match = {
 		id,
 		tournament: raw.event,
@@ -44,7 +46,25 @@ function parse_match(id, raw) {
 		}
 	}
 
-	match.cote = 1;
+	try {
+		let t1 = getTeam(match.team1.id);
+		let t2 = getTeam(match.team2.id);
+		t1 = await t1; t2 = await t2;
+
+		let r1 = t1.rank, r2 = t2.rank;
+		
+		if (r1 < r2) {
+			let ratio = r1 / (2 * r2);
+			match.cote = 1 - ratio;
+		}
+		else {
+			let ratio = r2 / (2 * r1);
+			match.cote = ratio;
+		}
+	}
+	catch (e) {
+		match.cote = 0.5;
+	}
 
 	return match;
 }
@@ -87,7 +107,7 @@ async function downloadTournament(id, insert) {
 async function downloadMatch(id, insert) {
 	console.log("Downloading match #" + id);
 	try {
-		let match = parse_match(id, await HLTV.getMatch({ id }));
+		let match = await parse_match(id, HLTV.getMatch({ id }));
 
 		if (insert || insert === undefined)
 			db.collection("matches").insertOne(match);
@@ -302,7 +322,7 @@ function verifyRegister(user) {
 		name: user.username,
 		email: user.mail,
 		password: hash,
-		points: 0
+		points: 100
 	};
 }
 
