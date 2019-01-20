@@ -5,7 +5,9 @@ const url = require('url');
 
 let db = null;
 
-function parse_match(id, raw) {
+async function parse_match(id, raw) {
+	raw = await raw;
+
 	let match = {
 		id,
 		tournament: raw.event,
@@ -44,7 +46,26 @@ function parse_match(id, raw) {
 		}
 	}
 
-	match.cote = 1;
+	try {
+		let t1 = getTeam(match.team1.id);
+		let t2 = getTeam(match.team2.id);
+		t1 = await t1; t2 = await t2;
+
+		let r1 = t1.rank, r2 = t2.rank;
+		
+		if (r1 < r2) {
+			let ratio = r1 / (2 * r2);
+			match.cote = 1 - ratio;
+		}
+		else {
+			let ratio = r2 / (2 * r1);
+			match.cote = ratio;
+		}
+		match.cote = Math.round(match.cote * 100) / 100;
+	}
+	catch (e) {
+		match.cote = 0.5;
+	}
 
 	return match;
 }
@@ -57,7 +78,7 @@ async function updateMatches(ids, fetchBets) {
 		let newVal = await downloadMatch(id, false);
 		updates.push(collec.updateOne({ id }, { $set: newVal }, { upsert: true }));
 		if (fetchBets && newVal.winner) {
-			updatePoints(id);
+			await updatePoints(id);
 		}
 	}
 	return Promise.all(updates);
@@ -87,7 +108,7 @@ async function downloadTournament(id, insert) {
 async function downloadMatch(id, insert) {
 	console.log("Downloading match #" + id);
 	try {
-		let match = parse_match(id, await HLTV.getMatch({ id }));
+		let match = await parse_match(id, HLTV.getMatch({ id }));
 
 		if (insert || insert === undefined)
 			db.collection("matches").insertOne(match);
@@ -302,7 +323,7 @@ function verifyRegister(user) {
 		name: user.username,
 		email: user.mail,
 		password: hash,
-		points: 0
+		points: 100
 	};
 }
 
@@ -360,30 +381,40 @@ async function removeBet(username, matchId) {
 
 
 async function checkpoint(username, match) {
-	
 	let test = await db.collection("users").findOne({ name : username });
 	let bet = test.bets;
-	let idbet = [];
+	let betnum = [];
 	let teambet = [];
-	let points=test.points;
 	for ( let i = 0; i < bet.length; i++) {
-		idbet.push(bet[i].id);
+		betnum.push(bet[i].num);
 		teambet.push(bet[i].team);
-		let listmatch = await db.collection("matches").findOne({ id: match });
-		let ggmatche = listmatch.winner;
-		if (ggmatche != null && ggmatche.name == teambet[i]) {
-			let newpoint = points +  parseInt(bet[i].num) ;
+	}
+	let listmatch = await db.collection("matches").findOne({ id: match });
+
+	let ggmatche = listmatch.winner;
+	if(ggmatche != null && ggmatche.name == listmatch.team1.name){
+		teamlost= listmatch.team2.name;
+	} else{
+		teamlost=listmatch.team1.name;
+	}
+	for (let j=0; j <teambet.length; j++){
+		if (ggmatche != null && ggmatche.name == teambet[j]) {
+			let points=test.points;
+			let newpoint = points +  parseInt(betnum[j]) ;
 			db.collection("users").updateOne({ name : username }, {$set: { points : newpoint }});
-			db.collection('users').updateOne( { name : username , "bets.id" : match }, {$set : {"bets.$.gain" : parseInt(bet[i].num) } } )
+			db.collection('users').updateOne( { name : username , "bets.id" : match }, {$set : {"bets.$.gain" : parseInt(betnum[j]) } } )
 			console.log("gg");
-		} else {
-			let newpoint = points -  parseInt(bet[i].num) ;
+			break;
+		} else  if (ggmatche != null && teamlost == teambet[j] ){
+			let points=test.points;
+			let newpoint = points -  parseInt(betnum[j]) ;
 			db.collection("users").updateOne({ name : username }, {$set: { points : newpoint }});
-			db.collection('users').updateOne( { name : username , "bets.id" : match }, {$set : {"bets.$.gain" : parseInt(-bet[i].num) } } )
-			console.log("not gg");
+			db.collection('users').updateOne( { name : username , "bets.id" : match }, {$set : {"bets.$.gain" :-betnum[j] } } )
+			console.log("not gg" );
+			break;
 		}
 	}
-	
+	// 1 + (0.4 + (0.5 - cote)/ 1.2) équipe 2 
 }
 
 async function updatePoints(match) {
@@ -394,6 +425,31 @@ async function updatePoints(match) {
 			}
 		}
 	console.log('Update bets', match);
+}
+
+async function search(query) {
+	let now = Date.now();
+	let max = 10;
+	let matches = { $or: [{ "team1.name": query.team }, { "team2.name": query.team }] }
+
+	let before = db.collection("matches")
+		.find({ $and: [matches, { date: { $lt: now } }] })
+		.sort({ date: 1 })
+		.limit(max)
+		.toArray();
+
+	let after = db.collection("matches")
+		.find({ $and: [matches, { date: { $gte: now } }] })
+		.sort({ date: 1 })
+		.limit(max)
+		.toArray();
+
+	return Promise.all([before, after]).then(m => {
+		return {
+			before: m[0],
+			after: m[1]
+		}
+	});
 }
 
 module.exports = {
@@ -411,6 +467,7 @@ module.exports = {
 	login,
 	addBet,
 	removeBet,
+	search,
 
 	connect,
 	init

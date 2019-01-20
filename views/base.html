@@ -25,17 +25,17 @@
 				<a class="header-link" href="/leaderboard">Leaderboard</a>
 				<a class="header-link" href="/calendar">Calendar</a>
 			</div>
-			<div id="nav-right">
-				<input type="text" placeholder="Seach CounterBet">
+			<form action="/search" id="nav-right">
+				<input type="text" placeholder="Seach CounterBet" name="team">
+
 				{% if _user %}
 				<a class="header-link" href="/user/{{_user.name}}">{{_user.name}}</a>
 				<a class="header-link" href="/logout">Logout</a>
 				{% else %}
 				<a class="header-link" href="/login">Sign&nbsp;in</a>
 				<a class="header-link rounded" href="/register">Sign&nbsp;up</a>
-
 				{% endif %}
-			</div>
+			</form>
 		</div>
 	</header>
 
