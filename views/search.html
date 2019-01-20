@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% import "pannels.html" as pannels %}
+
+{% block link %}
+<link rel="stylesheet" type="text/css" href="/css/match.css">
+<link rel="stylesheet" type="text/css" href="/css/index.css">
+<link rel="stylesheet" type="text/css" href="/css/pannel.css">
+{% endblock %}
+
+{% block content %}
+<main id="index-main">
+	<div id="left">
+		<h1>Previous matches</h1>
+		<br>
+
+		{% for match in results.before %}
+		
+		<div class="pannel">
+			{{ pannels.match_header(match, date) }}
+			<a href="/match/{{match.id}}">
+				<main>
+					<div class="matchup">
+						<div class="c40">
+							{{ pannels.match_content(match.team1) }}
+						</div>
+						<div class="c20">
+							{{match.format}}
+						</div>
+						<div class="c40">
+							{{ pannels.match_content(match.team2) }}
+						</div>
+					</div>
+				</main>
+			</a>
+		</div>
+		<br>
+		{% endfor %}
+	</div>
+
+
+
+	<div id="right">
+		<h1>Upcoming matches</h1>
+		<br>
+
+		{% for match in results.after %}
+		
+		<div class="pannel">
+			{{ pannels.match_header(match, date) }}
+			<a href="/match/{{match.id}}">
+				<main>
+					<div class="matchup">
+						<div class="c40">
+							{{ pannels.match_content(match.team1) }}
+						</div>
+						<div class="c20">
+							{{match.format}}
+						</div>
+						<div class="c40">
+							{{ pannels.match_content(match.team2) }}
+						</div>
+					</div>
+				</main>
+			</a>
+		</div>
+		<br>
+		{% endfor %}
+	</div>
+</main>
+{% endblock %}

@@ -61,6 +61,7 @@ async function parse_match(id, raw) {
 			let ratio = r2 / (2 * r1);
 			match.cote = ratio;
 		}
+		match.cote = Math.round(match.cote * 100) / 100;
 	}
 	catch (e) {
 		match.cote = 0.5;
@@ -426,6 +427,31 @@ async function updatePoints(match) {
 	console.log('Update bets', match);
 }
 
+async function search(query) {
+	let now = Date.now();
+	let max = 10;
+	let matches = { $or: [{ "team1.name": query.team }, { "team2.name": query.team }] }
+
+	let before = db.collection("matches")
+		.find({ $and: [matches, { date: { $lt: now } }] })
+		.sort({ date: 1 })
+		.limit(max)
+		.toArray();
+
+	let after = db.collection("matches")
+		.find({ $and: [matches, { date: { $gte: now } }] })
+		.sort({ date: 1 })
+		.limit(max)
+		.toArray();
+
+	return Promise.all([before, after]).then(m => {
+		return {
+			before: m[0],
+			after: m[1]
+		}
+	});
+}
+
 module.exports = {
 	getUpcomingMatches,
 	getLeaderboard,
@@ -441,6 +467,7 @@ module.exports = {
 	login,
 	addBet,
 	removeBet,
+	search,
 
 	connect,
 	init

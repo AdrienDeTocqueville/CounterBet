@@ -41,11 +41,13 @@ function try_goto(condition, res, req, file, ctx) {
 
 function do_goto(res, req, file, ctx) {
 	ctx = ctx || {};
+	ctx.date = time.toString;
 
 	if (req.session.username)
 		ctx._user = {
 			name: req.session.username
 		};
+
 	res.render(file, ctx);
 }
 
@@ -56,15 +58,15 @@ db.connect().then(() => {
 		let matches = await db.getUpcomingMatches();
 		let users = await db.getLeaderboard(5);
 		let teams = await db.getBestTeams(5);
-		try_goto(matches, res, req, 'index.html', { matches, users, teams, date: time.toString });
+		try_goto(matches, res, req, 'index.html', { matches, users, teams });
 	})
 	.get('/match/:match', async function (req, res) {
 		let match = await matchUtils.getMatch(req);
-		try_goto(match, res, req, 'match.html', { match, date: time.toString });
+		try_goto(match, res, req, 'match.html', { match });
 	})
 	.get('/tournament/:tournament', async function (req, res) {
 		let tournament = await db.getTournament(req.params.tournament);
-		try_goto(tournament, res, req, 'tournament.html', { tournament, date: time.toString });
+		try_goto(tournament, res, req, 'tournament.html', { tournament });
 	})
 	.get('/teams/:team', async function (req, res) {
 		let team = await db.getTeam(req.params.team);
@@ -76,7 +78,7 @@ db.connect().then(() => {
 	})
 	.get('/user/:name', async function (req, res) {
 		let user = await userUtils.getUser(req.params.name);
-		try_goto(user, res, req, 'user.html', { user, date: time.toString });
+		try_goto(user, res, req, 'user.html', { user });
 	})
 	.get('/leaderboard', async function (req, res) {
 		let users = await db.getLeaderboard(10);
@@ -85,7 +87,11 @@ db.connect().then(() => {
 	})
 	.get('/calendar', async function (req, res) {
 		let matches = await db.getUpcomingMatches();
-		do_goto(res, req, 'calendar.html', { matches, date: time.toString });
+		do_goto(res, req, 'calendar.html', { matches });
+	})
+	.get('/search', async function (req, res) {
+		let results = await db.search(req.query);
+		do_goto(res, req, "search.html", { results });
 	})
 	.get('/login', async function (req, res) {
 		do_goto(res, req, 'login.html');
