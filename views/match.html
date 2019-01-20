@@ -5,6 +5,8 @@
 <link rel="stylesheet" type="text/css" href="/css/match.css">
 <link rel="stylesheet" type="text/css" href="/css/index.css">
 <link rel="stylesheet" type="text/css" href="/css/pannel.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+ crossorigin="anonymous">
 {% endblock %}
 
 {% block script %}
@@ -14,7 +16,13 @@
 {% block content %}
 <br>
 <main id="index-main">
+
 	<div id="left">
+		<div class="row">
+			<div class="col-sm-4">.col-sm-4</div>
+			<div class="col-sm-4">.col-sm-4</div>
+			<div class="col-sm-4">.col-sm-4</div>
+		</div>
 		<div class="pannel">
 			{{ pannels.match_header(match, date) }}
 			<main>
@@ -35,21 +43,25 @@
 		<br>
 
 		{% if match.bet == null %}
+		<br>
 		<div class="pannel" id="bet">
 			<header class="title"> Pick a winner </header>
 			<main>
 				<div id="bet-team">
 					{% macro bet_team(i, name) %}
-					<button onclick="bet_for({{i}}, '{{name}}')">{{name}}</button>
+					<button style="color: #FFFFFF" onclick="bet_for({{i}}, '{{name}}')">{{name}}</button>
 					{% endmacro %}
 					{{bet_team(0, match.team1.name)}}
 					{{bet_team(1, match.team2.name)}}
 
 				</div>
-				<div id="bet-amount">
-					<a>How much do you bet ?</a>
-					<input type="number" id="num">
+				<div id="bet-amount" class="row" style="padding: 10px">
+					<div class="col-sm-12 col-md-6">How much do you bet ?</div>
+					<div class="col-sm-12 col-md-6">
+						<input type="number" id="num">
+					</div>
 				</div>
+
 				<div id="bet-error">
 					<a>You must select a team !</a>
 				</div>
@@ -57,7 +69,7 @@
 		</div>
 
 		{% if match.winner == null and not match.live %}
-		<button onclick="bet({{match.id}})">Make a bet !</button>
+		<button style="color: #FFFFFF;" onclick="bet({{match.id}})">Make a bet !</button>
 		<br>
 		<br>
 		{% endif %}
@@ -65,11 +77,12 @@
 		<div class="pannel">
 			<header class="title"> Your Bet </header>
 			<main>
-				{{date(match.bet.date)}} You bet for '{{match.bet.team}}'
-				num: {{match.bet.num}}
+				<div style="text-align: center;">
+					You bet {{match.bet.num}}pt for '{{match.bet.team}}'
+				</div>
 			</main>
 		</div>
-		<button onclick="cancel_bet({{match.bet.id}})">Cancel bet</button>
+		<button style="color: #FFFFFF" onclick="cancel_bet({{match.bet.id}})">Cancel bet</button>
 		<br>
 		<br>
 		{% endif %}
