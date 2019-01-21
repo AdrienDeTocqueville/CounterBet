@@ -40,9 +40,7 @@
 	<div class="col-sm-6 col-xs-12">
 		<h1>Upcoming matches</h1>
 		<br>
-
 		{% for match in results.after %}
-
 		<div class="pannel">
 			{{ pannels.match_header(match, date) }}
 			<a href="/match/{{match.id}}">
