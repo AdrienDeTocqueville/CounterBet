@@ -7,38 +7,74 @@
 	{% endblock %}
 	<meta charset="utf-8" />
 
-	<link rel="stylesheet" type="text/css" href="/css/base.css">
 	{% block link %}
 	{% endblock %}
-	
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="/css/base.css">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+	 crossorigin="anonymous">
+
 </head>
 
 <body>
-	<header>
-		<div id="logo">
-			<a href="/"><img src="/img/logo.png" alt="CounterBet" /></a>
-			<a>Counter<strong>Bet</strong></a>
-		</div>
-		<div id="link">
-			<div id="nav-left">
-				<a class="header-link" href="/leaderboard">Leaderboard</a>
-				<a class="header-link" href="/calendar">Calendar</a>
-			</div>
-			<form action="/search" id="nav-right">
-				<input type="text" placeholder="Seach CounterBet" name="team">
 
-				{% if _user %}
-				<a class="header-link" href="/user/{{_user.name}}">{{_user.name}}</a>
-				<a class="header-link" href="/logout">Logout</a>
-				{% else %}
-				<a class="header-link" href="/login">Sign&nbsp;in</a>
-				<a class="header-link rounded" href="/register">Sign&nbsp;up</a>
-				{% endif %}
-			</form>
+	<header class="navbar navbar-fixed-top" style="position: relative;">
+		<div class="container" style="width: 95%; margin-top: 10px">
+			<div class="navbar-header">
+				<div>
+					<div>
+						<a href="/"><img src="/img/logo.png" alt="CounterBet" /></a>
+						<a>Counter<strong>Bet</strong></a>
+					</div>
+					<div>
+
+						<a href="/leaderboard" class=" navbar-toggle col-xs-3" style="float: left">Leaderboard</a>
+						<a href="/calendar" class="navbar-toggle col-xs-3" style="float: left">Calendar </a>
+
+						{% if _user %}
+						<a class=" navbar-toggle col-xs-3" style="float: left" href="/user/{{_user.name}}">{{_user.name}}</a>
+						<a class=" navbar-toggle col-xs-3" style="float: left" href="/logout">Logout</a>
+						{% else %}
+						<a class=" navbar-toggle col-xs-3" style="float: left" href="/login">Sign&nbsp;in</a>
+						<a class=" rounded navbar-toggle col-xs-3" style="float: left" href="/register">Sign&nbsp;up</a>
+						{% endif %}
+						<form action="/search" class="navbar-toggle col-xs-6" style="float: left">
+							<input type="text" style="color: black; width: 100%;" placeholder="Seach CounterBet" name="team">
+						</form>
+
+					</div>
+				</div>
+			</div>
+			<nav class="collapse navbar-collapse" role="navigation">
+				<ul class="nav navbar-nav">
+					<li>
+						<a class="header-link" href="/leaderboard">Leaderboard</a>
+					</li>
+					<li>
+						<a class="header-link" href="/calendar">Calendar</a>
+					</li>
+					<li>
+						<form action="/search" style="height: 50px; margin-top: 15px;">
+							<input type="text" style="color: black; width: 100%;" placeholder="Seach CounterBet" name="team">
+						</form>
+					</li>
+					<li>
+						{% if _user %}
+						<a class="header-link" href="/user/{{_user.name}}">{{_user.name}}</a>
+					</li>
+					<li>
+						<a class="header-link" href="/logout">Logout</a>
+						{% else %}
+						<a class="header-link" href="/login">Sign&nbsp;in</a>
+					</li>
+					<li>
+						<a class="header-link rounded" href="/register">Sign&nbsp;up</a>
+						{% endif %}
+					</li>
+				</ul>
+			</nav>
 		</div>
 	</header>
-
 	{% block content %}
 	{% endblock %}
 </body>
