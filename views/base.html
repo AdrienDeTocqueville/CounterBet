@@ -20,56 +20,58 @@
 
 	<header class="navbar navbar-fixed-top" style="position: relative;">
 		<div class="container" style="width: 95%; margin-top: 10px">
-			<div class="navbar-header">
+			<div class="navbar-header" style="width: 100%">
 				<div>
 					<div>
 						<a href="/"><img src="/img/logo.png" alt="CounterBet" /></a>
-						<a>Counter<strong>Bet</strong></a>
+						<a href="/" style="margin-left: 5px; font-size: 18px;">Counter<strong>Bet</strong></a>
 					</div>
 					<div>
 
-						<a href="/leaderboard" class=" navbar-toggle col-xs-3" style="float: left">Leaderboard</a>
-						<a href="/calendar" class="navbar-toggle col-xs-3" style="float: left">Calendar </a>
+						<a href="/leaderboard" class="navbar-toggle col-xs-3" style="float: left;">Leaderboard</a>
+						<a href="/calendar" class="navbar-toggle col-xs-3" style="float: left;">&nbsp;Calendar </a>
 
 						{% if _user %}
-						<a class=" navbar-toggle col-xs-3" style="float: left" href="/user/{{_user.name}}">{{_user.name}}</a>
-						<a class=" navbar-toggle col-xs-3" style="float: left" href="/logout">Logout</a>
+						<a class="navbar-toggle col-xs-3" style="float: right" href="/user/{{_user.name}}">{{_user.name}}</a>
+						<a class="navbar-toggle col-xs-3" style="float: right" href="/logout">Logout</a>
 						{% else %}
-						<a class=" navbar-toggle col-xs-3" style="float: left" href="/login">Sign&nbsp;in</a>
-						<a class=" rounded navbar-toggle col-xs-3" style="float: left" href="/register">Sign&nbsp;up</a>
+						<a class="navbar-toggle col-xs-3" style="float: right" href="/login">Sign&nbsp;in</a>
+						<a class="navbar-toggle col-xs-3 rounded" style="float: right" href="/register">Sign&nbsp;up</a>
 						{% endif %}
 						<form action="/search" class="navbar-toggle col-xs-6" style="float: left">
-							<input type="text" style="color: black; width: 100%;" placeholder="Seach CounterBet" name="team">
+							<input type="text" style="background: none; border: 0; border-radius: 3px; background-color: #404448; width: 100%;" placeholder="Seach CounterBet" name="team">
 						</form>
 
 					</div>
 				</div>
 			</div>
 			<nav class="collapse navbar-collapse" role="navigation">
-				<ul class="nav navbar-nav">
-					<li>
+				<ul class="nav navbar-nav" style="width: 100%">
+					<li style="margin-left: 23px; float: left;">
 						<a class="header-link" href="/leaderboard">Leaderboard</a>
 					</li>
-					<li>
+					<li style="float: left;">
 						<a class="header-link" href="/calendar">Calendar</a>
 					</li>
-					<li>
-						<form action="/search" style="height: 50px; margin-left: 5px; margin-top: 15px;">
-							<input type="text" style="color: black; width: 100%;" placeholder="Seach CounterBet" name="team">
-						</form>
-					</li>
-					<li>
+
+					<li style="float: right;">
 						{% if _user %}
-						<a class="header-link" href="/user/{{_user.name}}">{{_user.name}}</a>
-					</li>
-					<li>
 						<a class="header-link" href="/logout">Logout</a>
-						{% else %}
-						<a class="header-link" href="/login">Sign&nbsp;in</a>
 					</li>
-					<li>
+					<li style="float: right;">
+						<a class="header-link" href="/user/{{_user.name}}">{{_user.name}}</a>
+						{% else %}
 						<a class="header-link rounded" href="/register">Sign&nbsp;up</a>
+					</li>
+					<li style="float: right;">
+						<a class="header-link" href="/login">Sign&nbsp;in</a>
 						{% endif %}
+					</li>
+
+					<li style="float: right;">
+						<form action="/search" style="height: 50px; margin-left: 5px; margin-top: 15px;">
+							<input type="text" style="background: none; border: 0; border-radius: 3px; background-color: #404448; width: 100%;" placeholder="Seach CounterBet" name="team">
+						</form>
 					</li>
 				</ul>
 			</nav>
