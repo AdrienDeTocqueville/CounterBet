@@ -7,9 +7,8 @@
 {% endblock %}
 
 {% block content %}
-<main id="index-main">
-
-	<div id="left">
+<main class="container">
+	<div class="col-sm-6 col-xs-12">
 		<h2>Recent Result</h2>
 		<br>
 		{% for match in matches %}
@@ -40,27 +39,27 @@
 		{% endfor %}
 	</div>
 
-	<div id="right">
+	<div class="col-sm-6 col-xs-12">
 		<h2>Upcoming matches</h2>
 		<br>
 
 		{% for match in matches %}
 		<div class="pannel">
-				{{ pannels.match_header(match, date) }}
-				<main>
-					<a href="/match/{{match.id}}">
-						<div class="matchup">
-							<div class="c40">
-								{{ pannels.match_content(match.team1) }}
-							</div>
-							<div class="c20">
-								{{match.format}}
-							</div>
-							<div class="c40">
-								{{ pannels.match_content(match.team2) }}
-							</div>
+			{{ pannels.match_header(match, date) }}
+			<main>
+				<a href="/match/{{match.id}}">
+					<div class="matchup">
+						<div class="c40">
+							{{ pannels.match_content(match.team1) }}
 						</div>
-				</main>
+						<div class="c20">
+							{{match.format}}
+						</div>
+						<div class="c40">
+							{{ pannels.match_content(match.team2) }}
+						</div>
+					</div>
+			</main>
 		</div>
 		</a>
 		<br>

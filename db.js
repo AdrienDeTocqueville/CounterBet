@@ -247,8 +247,8 @@ async function connect(url, refreshTime) {
 		return null;
 	}
 
-	updateDB();
-	setInterval(updateDB, refreshTime);
+	//updateDB();
+	//setInterval(updateDB, refreshTime);
 
 	return client;
 }

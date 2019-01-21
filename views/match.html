@@ -15,14 +15,9 @@
 
 {% block content %}
 <br>
-<main id="index-main">
+<main class="container">
+	<div class="col-sm-6 col-xs-12">
 
-	<div id="left">
-		<div class="row">
-			<div class="col-sm-4">.col-sm-4</div>
-			<div class="col-sm-4">.col-sm-4</div>
-			<div class="col-sm-4">.col-sm-4</div>
-		</div>
 		<div class="pannel">
 			{{ pannels.match_header(match, date) }}
 			<main>
@@ -131,7 +126,7 @@
 
 
 
-	<div id="right">
+	<div class="col-sm-6 col-xs-12">
 		{% if match.streamURL and match.live %}
 		<iframe src="{{match.streamURL}}" height="340px" width="100%" frameborder="0" scrolling="no" allowfullscreen="true">
 		</iframe>

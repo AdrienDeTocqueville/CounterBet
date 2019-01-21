@@ -64,8 +64,8 @@
 	{% endif %}
 	<h1 style="text-align: center;">Bets</h1>
 
-	<div id="index-main">
-		<div id="left">
+	<div class="container">
+		<div class="col-sm-6 col-xs-12">
 
 			<h2>Finished</h2>
 			{% for bet in user.bets %}
@@ -75,7 +75,8 @@
 			{% endfor %}
 		</div>
 		{% if _user.name == user.name %}
-		<div id="right">
+
+		<div class="col-sm-6 col-xs-12">
 
 			<h2>Incoming</h2>
 			{% for bet in user.bets %}
@@ -88,5 +89,6 @@
 		{% endif %}
 	</div>
 </main>
+
 
 {% endblock %}
