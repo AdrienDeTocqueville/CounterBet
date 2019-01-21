@@ -390,8 +390,8 @@ async function checkpoint(username, match) {
 		teambet.push(bet[i].team);
 	}
 	let listmatch = await db.collection("matches").findOne({ id: match });
-
 	let ggmatche = listmatch.winner;
+	
 	if(ggmatche != null && ggmatche.name == listmatch.team1.name){
 		teamlost= listmatch.team2.name;
 	} else{
@@ -400,9 +400,10 @@ async function checkpoint(username, match) {
 	for (let j=0; j <teambet.length; j++){
 		if (ggmatche != null && ggmatche.name == teambet[j]) {
 			let points=test.points;
-			let newpoint = points +  parseInt(betnum[j]) ;
+			let ggpoint=Math.round( (parseInt(betnum[j])*(1+listmatch.cote)) )
+			let newpoint = points + ggpoint ;
 			db.collection("users").updateOne({ name : username }, {$set: { points : newpoint }});
-			db.collection('users').updateOne( { name : username , "bets.id" : match }, {$set : {"bets.$.gain" : parseInt(betnum[j]) } } )
+			db.collection('users').updateOne( { name : username , "bets.id" : match }, {$set : {"bets.$.gain" : ggpoint } } )
 			console.log("gg");
 			break;
 		} else  if (ggmatche != null && teamlost == teambet[j] ){
