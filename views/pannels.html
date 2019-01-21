@@ -8,7 +8,13 @@
 
 	{% if match.score %}
 	<p>
-		{{match.score}}
+		{% if match.score[0] > match.score[1] %}
+			<a style="color: green">{{match.score[0]}}</a> - 
+			<a style="color: red">{{match.score[1]}}</a>
+    		{% else %}
+			<a style="color: red">{{match.score[0]}}</a> - 
+			<a style="color: green">{{match.score[1]}}</a>
+		{% endif %}
 	</p>
 	{% endif %}
 

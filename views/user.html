@@ -12,28 +12,20 @@
 	{{ pannels.match_header(bet.match, date) }}
 	<a href="/match/{{ bet.match.id }}">
 		<main>
-			<div class="matchup">
-				<div class="c40">
-					{{ bet.match.team1.name }}
-				</div>
-				<div class="c20">
-					{{ bet.match.format }}
-				</div>
-				<div class="c40">
-					{{ bet.match.team2.name }}
-				</div>
-			</div>
+			{{ pannels.match_content(bet.match) }}
 			<br>
 			<div class="matchup">
 				<div class="c40">
-					Bet {{bet.num}}pt
-				</div>
-				<div class="c20">
-					rating : {{bet.match.cote +1}}
+					You bet <strong>{{bet.num}}pt</strong> on <strong>{{bet.team}}</strong>
 				</div>
 				{%if bet.gain %}
 				<div class="c40">
-					result: {{bet.gain}}pt
+					gain: 
+					{% if bet.gain < 0 %}
+						<strong style="color: red">{{bet.gain}}pt</strong>
+					{% else %}
+						<strong style="color: green">{{bet.gain}}pt</strong>
+					{% endif %}
 				</div>
 				{% endif %}
 			</div>
@@ -46,10 +38,38 @@
 
 {% block content %}
 <main>
+	<h1 style="text-align: center;">Bets</h1>
 
+	<div class="container">
+		<div class="col-sm-6 col-xs-12">
+			<h2>Finished</h2>
+
+			{% for bet in user.bets %}
+				{%if bet.match.score %}
+					{{ bet_state(bet) }}
+				{% endif %}
+			{% endfor %}
+		</div>
+
+		{% if _user.name == user.name %}
+		<div class="col-sm-6 col-xs-12">
+
+			<h2>Incoming</h2>
+			{% for bet in user.bets %}
+				{%if not bet.match.score %}
+					{{ bet_state(bet) }}
+				{% endif %}
+			{% endfor %}
+
+		</div>
+		{% endif %}
+	</div>
+
+	<br>
+	<br>
 
 	{% if _user.name == user.name %}
-	<h2 style="text-align: center;">Utilisateur</h2>
+	<h2 style="text-align: center;">Your personal informations</h2>
 	<div class="matchup">
 		<div class="c20">
 			Name : {{ user.name }}
@@ -62,32 +82,6 @@
 		</div>
 	</div>
 	{% endif %}
-	<h1 style="text-align: center;">Bets</h1>
-
-	<div class="container">
-		<div class="col-sm-6 col-xs-12">
-
-			<h2>Finished</h2>
-			{% for bet in user.bets %}
-			{%if bet.match.score %}
-			{{ bet_state(bet) }}
-			{% endif %}
-			{% endfor %}
-		</div>
-		{% if _user.name == user.name %}
-
-		<div class="col-sm-6 col-xs-12">
-
-			<h2>Incoming</h2>
-			{% for bet in user.bets %}
-			{%if not bet.match.score %}
-			{{ bet_state(bet) }}
-			{% endif %}
-			{% endfor %}
-
-		</div>
-		{% endif %}
-	</div>
 </main>
 
 
