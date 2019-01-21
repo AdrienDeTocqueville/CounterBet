@@ -18,6 +18,12 @@
 
 /* HISTORY */
 .prev_match {
+	width: 100%;
+	margin: 10px;
+}
+
+.score {
+	text-align: center;
 }
 
 .pannel > span {

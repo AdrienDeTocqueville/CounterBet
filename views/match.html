@@ -18,24 +18,7 @@
 <main class="container">
 	<div class="col-sm-6 col-xs-12">
 
-		<div class="pannel">
-			{{ pannels.match_header(match, date) }}
-			<main>
-				<div class="matchup">
-					<a href="/team/{{match.team1.id}}" class="c40">
-						{{ pannels.match_content(match.team1) }}
-					</a>
-					<div class="c20">
-						{{match.format}}
-					</div>
-					<a href="/team/{{match.team2.id}}" class="c40">
-						{{ pannels.match_content(match.team2) }}
-					</a>
-				</div>
-			</main>
-		</div>
-
-		<br>
+		{{ pannels.match(match, date) }} <br>
 
 		{% if match.bet == null %}
 		<br>
@@ -85,19 +68,16 @@
 		<div class="pannel">
 			<header class="title"> History </header>
 			{% if match.history and match.history.length %}
+			<table class="prev_match">
 			{% for prev_match in match.history %}
-			<div class="prev_match">
-				<div class="c40">
-					<i>{{date(prev_match.date)}}</i>
-				</div>
-				<div class="c20">
-					<strong>{{prev_match.team1.name}}</strong> {{prev_match.score[0]}}
-				</div>
-				<div class="c20">
-					{{prev_match.score[1]}} <strong>{{prev_match.team2.name}}</strong>
-				</div>
-			</div>
+				<tr>
+					<td><i>{{date(prev_match.date)}}</i></td>
+					<td><strong>{{prev_match.team1.name}}</strong></td>
+					<td>{{prev_match.score[0]}} - {{prev_match.score[1]}}</td>
+					<td><strong>{{prev_match.team2.name}}</strong></td>
+				</tr>
 			{% endfor %}
+			</table>
 			{% else %}
 			<span>These teams did not play against each other recently.</span>
 			{% endif %}
@@ -108,14 +88,15 @@
 		<br>
 		<div class="pannel">
 			<header class="title"> Previous matches - {{team.name}} </header>
+			<table class="prev_match">
 			{% for prev_match in team.history %}
-			<div class="prev_match">
-				<i>{{date(prev_match.date)}}</i>
-				-
-				Against <strong>{{prev_match.team2.name}}</strong>
-				{{prev_match.score[0]}} - {{prev_match.score[1]}}
-			</div>
+				<tr>
+					<td><i>{{date(prev_match.date)}}</i></td>
+					<td>Against <strong>{{prev_match.team2.name}}</strong></td>
+					<td class="score">{{prev_match.score[0]}} - {{prev_match.score[1]}}</td>
+				</tr>
 			{% endfor %}
+			</table>
 		</div>
 		{% endif %}
 		{% endmacro %}

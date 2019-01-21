@@ -21,13 +21,38 @@
 </header>
 {% endmacro %}
 
-{% macro match_content(team) %}
+{% macro team(t) %}
 <div class="team">
-	<img src="https://static.hltv.org/images/team/logo/{{team.id}}">
-	{{team.name}}
+	{{ team_icon(t) }}
+	{{t.name}}
 </div>
 {% endmacro %}
 
 {% macro team_icon(team) %}
 <img src="https://static.hltv.org/images/team/logo/{{team.id}}">
+{% endmacro %}
+
+{% macro match_content(m) %}
+<div class="matchup">
+	<div class="b c40">
+		{{ team(m.team1) }}
+		<div class="cote"> {{(m.cote * 100) | round}}% </div>
+	</div>
+	<div class="vs">VS</div>
+	<div class="b c40">
+		<div class="cote"> {{((1-m.cote) * 100) | round}}% </div>
+		{{ team(m.team2) }}
+	</div>
+</div>
+{% endmacro %}
+
+{% macro match(m, date) %}
+<div class="pannel">
+	{{ match_header(m, date) }}
+	<a href="/match/{{m.id}}">
+		<main>
+			{{ match_content(m) }}
+		</main>
+	</a>
+</div>
 {% endmacro %}

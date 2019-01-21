@@ -6,7 +6,10 @@ function toString(d) {
 
 	if (time > 24 * 60 * 60 * 1000) // 1 day
 	{
-		return (new Date(d)).toLocaleString();
+		d = new Date(d);
+		var months = [ "January", "February", "March", "April", "May", "June",
+			"July", "August", "September", "October", "November", "December" ];
+		return d.getDate() + "/" + (d.getMonth()+1) + "/" + d.getFullYear();
 	}
 	if (time > 60 * 1000) // 1 minute
 	{

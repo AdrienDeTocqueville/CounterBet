@@ -25,7 +25,7 @@
 <div style="padding : 2px 25px;">
 	{% for team in tournament.teams %}
 	<div style="display: inline-block; position: relative;" href="/team/{{team.id}}">
-		{{ pannels.match_content(team) }}
+		{{ pannels.team(team) }}
 	</div>
 	{% endfor %}
 </div>

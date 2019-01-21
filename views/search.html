@@ -14,26 +14,7 @@
 		<br>
 
 		{% for match in results.before %}
-
-		<div class="pannel">
-			{{ pannels.match_header(match, date) }}
-			<a href="/match/{{match.id}}">
-				<main>
-					<div class="matchup">
-						<div class="c40">
-							{{ pannels.match_content(match.team1) }}
-						</div>
-						<div class="c20">
-							{{match.format}}
-						</div>
-						<div class="c40">
-							{{ pannels.match_content(match.team2) }}
-						</div>
-					</div>
-				</main>
-			</a>
-		</div>
-		<br>
+			{{ pannels.match(match, date) }} <br>
 		{% endfor %}
 	</div>
 
@@ -41,25 +22,7 @@
 		<h1>Upcoming matches</h1>
 		<br>
 		{% for match in results.after %}
-		<div class="pannel">
-			{{ pannels.match_header(match, date) }}
-			<a href="/match/{{match.id}}">
-				<main>
-					<div class="matchup">
-						<div class="c40">
-							{{ pannels.match_content(match.team1) }}
-						</div>
-						<div class="c20">
-							{{match.format}}
-						</div>
-						<div class="c40">
-							{{ pannels.match_content(match.team2) }}
-						</div>
-					</div>
-				</main>
-			</a>
-		</div>
-		<br>
+			{{ pannels.match(match, date) }} <br>
 		{% endfor %}
 	</div>
 </main>

@@ -84,6 +84,7 @@
 	font-size: 16px;
 	line-height: 35px;
 	padding-right: 25px;
+	padding-left: 25px;
 	text-align: center;
 }
 
@@ -91,4 +92,25 @@
 {
 	display: block;
 	margin: 0 auto;
+}
+
+.b {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.cote {
+	font-size: 1em;
+	font-weight: 700;
+	color: gray;
+}
+
+.vs {
+	font-size: 1em;
+	font-weight: 700;
+	padding: 10px;
+	background-color: #eeecec;
+	color: gray;
+	border-radius: 100%;
 }

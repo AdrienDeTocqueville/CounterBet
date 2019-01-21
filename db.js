@@ -182,7 +182,7 @@ function getMatches(team1, team2, max, before) {
 
 	return db.collection("matches")
 		.find({ $and: [query, { winner: { $ne: null } }, { date: { $lt: before } }] })
-		.sort({ date: 1 })
+		.sort({ date: -1 })
 		.limit(max)
 		.toArray();
 }
@@ -247,8 +247,8 @@ async function connect(url, refreshTime) {
 		return null;
 	}
 
-	//updateDB();
-	//setInterval(updateDB, refreshTime);
+	updateDB();
+	setInterval(updateDB, refreshTime);
 
 	return client;
 }
@@ -435,7 +435,7 @@ async function search(query) {
 
 	let before = db.collection("matches")
 		.find({ $and: [matches, { date: { $lt: now } }] })
-		.sort({ date: 1 })
+		.sort({ date: -1 })
 		.limit(max)
 		.toArray();
 
