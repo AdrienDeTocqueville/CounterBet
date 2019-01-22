@@ -394,14 +394,22 @@ async function checkpoint(username, match) {
 	
 	if(ggmatche != null && ggmatche.name == listmatch.team1.name){
 		teamlost= listmatch.team2.name;
-	} else{
+	} else {
 		teamlost=listmatch.team1.name;
 	}
-	for (let j=0; j <teambet.length; j++){
+
+	for (let j=0; j < teambet.length; j++) {
 		if (ggmatche != null && ggmatche.name == teambet[j]) {
 			let points=test.points;
-			let ggpoint=Math.round( (parseInt(betnum[j])*(1+listmatch.cote)) )
+			let cote;
+			if (ggmatche.name == listmatch.team1.name) {
+				cote = 2 - listmatch.cote;
+			} else {
+				cote = 1 + listmatch.cote;
+			}
+			let ggpoint = Math.round( parseInt(betnum[j]) * cote )
 			let newpoint = points + ggpoint ;
+
 			db.collection("users").updateOne({ name : username }, {$set: { points : newpoint }});
 			db.collection('users').updateOne( { name : username , "bets.id" : match }, {$set : {"bets.$.gain" : ggpoint } } )
 			console.log("gg");
@@ -415,7 +423,6 @@ async function checkpoint(username, match) {
 			break;
 		}
 	}
-	// 1 + (0.4 + (0.5 - cote)/ 1.2) équipe 2 
 }
 
 async function updatePoints(match) {

@@ -8,17 +8,7 @@
 
 {% block content %}
 <main class="container">
-	<div class="col-sm-6 col-xs-12">
-		<h2>Recent Result</h2>
-		<br>
-		{% for match in matches %}
-			{% if not match.winner == null %}
-				{{ pannels.match(match, date) }} <br>
-			{% endif %}
-		{% endfor %}
-	</div>
-
-	<div class="col-sm-6 col-xs-12">
+	<div class="col-sm-offset-3 col-sm-6 col-xs-12">
 		<h2>Upcoming matches</h2>
 		<br>
 
